@@ -1,0 +1,24 @@
+presets:
+  coe-ds:
+    name: CoE Data Science
+    description: "CoE Data Science Preset Installation"
+    packages:
+      - git
+      - fzf
+      - ripgrep
+      - jq
+      - htop
+    casks:
+      - visual-studio-code
+      - iterm2
+      - rectangle
+      - brave-browser
+    npm:
+      - typescript
+      - prettier
+      - eslint
+    vscode:
+      - ms-python.python
+      - dbaeumer.vscode-eslint
+      - esbenp.prettier-vscode
+    taps: []

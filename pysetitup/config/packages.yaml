@@ -1,0 +1,465 @@
+categories:
+  - name: CLI Tools
+    icon: "⚡"
+    packages:
+      # Essential tools
+      - name: bat
+        desc: Cat with syntax highlighting
+      - name: btop
+        desc: Resource monitor
+      - name: coreutils
+        desc: GNU core utilities
+      - name: curl
+        desc: Transfer data with URLs
+      - name: eza
+        desc: Modern ls replacement
+      - name: fd
+        desc: Fast find alternative
+      - name: fzf
+        desc: Fuzzy finder
+      - name: htop
+        desc: Interactive process viewer
+      - name: jq
+        desc: JSON processor
+      - name: ripgrep
+        desc: Fast grep alternative
+      - name: tealdeer
+        desc: Simplified man pages (tldr)
+      - name: tree
+        desc: Directory tree viewer
+      - name: unzip
+        desc: Extract compressed files
+      - name: vhs
+        desc: Terminal screen recorder
+      - name: watch
+        desc: Execute program periodically
+      - name: wget
+        desc: Network downloader
+      - name: yq
+        desc: YAML processor
+      - name: z
+        desc: Jump to frecent directories
+      - name: zoxide
+        desc: Smarter cd command
+      # Git tools
+      - name: git
+        desc: Distributed version control
+      - name: gh
+        desc: GitHub CLI
+      - name: git-delta
+        desc: Better git diff
+      - name: git-lfs
+        desc: Git Large File Storage
+      - name: lazygit
+        desc: Terminal UI for git
+      - name: pre-commit
+        desc: Git hooks framework
+      - name: stow
+        desc: Symlink farm manager
+      - name: tig
+        desc: Text-mode git interface
+
+  - name: Development
+    icon: "🛠"
+    packages:
+      # Languages & Runtimes
+      - name: bun
+        desc: Fast JS runtime & bundler
+      - name: deno
+        desc: Secure JS/TS runtime
+      - name: elixir
+        desc: Functional programming language
+      - name: gcc
+        desc: GNU compiler collection
+      - name: go
+        desc: Go programming language
+      - name: llm
+        desc: CLI for LLMs
+      - name: miniconda
+        desc: Minimal Conda installer
+        cask: true
+      - name: neovim
+        desc: Modern Vim
+      - name: node
+        desc: JavaScript runtime
+      - name: ollama
+        desc: Run LLMs locally
+      - name: openjdk@11
+        desc: Java Development Kit 11
+      - name: pnpm
+        desc: Fast npm alternative
+      - name: python
+        desc: Python 3
+      - name: python@3.10
+        desc: Python 3.10
+      - name: python@3.12
+        desc: Python 3.12
+      - name: rustup
+        desc: Rust toolchain
+      - name: tmux
+        desc: Terminal multiplexer
+      - name: uv
+        desc: Fast Python package manager
+      - name: yarn
+        desc: JavaScript package manager
+      - name: zig
+        desc: Systems programming language
+      # Build tools
+      - name: cmake
+        desc: Cross-platform build system
+      - name: graphviz
+        desc: Graph visualization software
+      - name: make
+        desc: Build automation tool
+      - name: pandoc
+        desc: Universal document converter
+      - name: snappy
+        desc: Compression library
+      # DevOps & Cloud
+      - name: argocd
+        desc: GitOps for Kubernetes
+      - name: awscli
+        desc: AWS CLI
+      - name: dive
+        desc: Explore Docker image layers
+      - name: docker
+        desc: Container runtime
+      - name: docker-compose
+        desc: Multi-container Docker
+      - name: helm
+        desc: Kubernetes package manager
+      - name: httpie
+        desc: HTTP client
+      - name: k9s
+        desc: Kubernetes TUI
+      - name: kubectl
+        desc: Kubernetes CLI
+      - name: lazydocker
+        desc: Terminal UI for Docker
+      - name: ngrok
+        desc: Secure tunnels to localhost
+        cask: true
+      - name: orbstack
+        desc: Docker & Linux VMs
+        cask: true
+      - name: postman
+        desc: API platform
+        cask: true
+      - name: proxyman
+        desc: HTTP debugging proxy
+        cask: true
+      - name: terraform
+        desc: Infrastructure as code
+      # Databases
+      - name: datagrip
+        desc: JetBrains database IDE
+        cask: true
+      - name: duckdb
+        desc: Analytical SQL database
+      - name: mysql
+        desc: MySQL client
+      - name: odbc-manager
+        desc: ODBC database manager
+        cask: true
+      - name: pgadmin4
+        desc: PostgreSQL admin GUI
+        cask: true
+      - name: postgresql
+        desc: PostgreSQL client
+      - name: redis
+        desc: Redis CLI
+      - name: sqlite
+        desc: Embedded SQL database
+      - name: tableplus
+        desc: Database GUI client
+        cask: true
+
+  - name: Applications
+    icon: "💻"
+    packages:
+      # Editors & IDEs
+      - name: cursor
+        desc: AI-powered editor
+        cask: true
+      - name: sublime-text
+        desc: Lightweight text editor
+        cask: true
+      - name: visual-studio-code
+        desc: VS Code
+        cask: true
+      - name: webstorm
+        desc: JavaScript IDE
+        cask: true
+      - name: zed
+        desc: High-performance editor
+        cask: true
+      # Terminals
+      - name: alacritty
+        desc: GPU-accelerated terminal
+        cask: true
+      - name: ghostty
+        desc: Fast native terminal
+        cask: true
+      - name: iterm2
+        desc: Terminal emulator
+        cask: true
+      - name: kitty
+        desc: GPU-based terminal
+        cask: true
+      - name: warp
+        desc: Modern terminal
+        cask: true
+      # Browsers
+      - name: arc
+        desc: Arc browser
+        cask: true
+      - name: brave-browser
+        desc: Privacy-focused browser
+        cask: true
+      - name: firefox
+        desc: Firefox browser
+        cask: true
+      - name: google-chrome
+        desc: Chrome browser
+        cask: true
+      - name: microsoft-edge
+        desc: Edge browser
+        cask: true
+      # AI Tools
+      - name: chatgpt
+        desc: ChatGPT desktop app
+        cask: true
+      - name: claude
+        desc: Claude AI desktop app
+        cask: true
+      - name: comfyui
+        desc: Stable Diffusion GUI
+        cask: true
+      - name: lm-studio
+        desc: Run LLMs locally
+        cask: true
+      # Productivity & Design
+      - name: aldente
+        desc: Battery charge limiter
+        cask: true
+      - name: alfred
+        desc: Productivity & launcher
+        cask: true
+      - name: anytype
+        desc: Knowledge management
+        cask: true
+      - name: appcleaner
+        desc: Thorough app uninstaller
+        cask: true
+      - name: discord
+        desc: Community chat
+        cask: true
+      - name: drawio
+        desc: Diagram & flowchart tool
+        cask: true
+      - name: dropbox
+        desc: Cloud storage & sync
+        cask: true
+      - name: figma
+        desc: Design tool
+        cask: true
+      - name: font-hack-nerd-font
+        desc: Hack Nerd Font
+        cask: true
+      - name: font-meslo-lg-nerd-font
+        desc: Meslo LG Nerd Font
+        cask: true
+      - name: iina
+        desc: Modern media player
+        cask: true
+      - name: imageoptim
+        desc: Image compression
+        cask: true
+      - name: keka
+        desc: File archiver
+        cask: true
+      - name: maccy
+        desc: Clipboard manager
+        cask: true
+      - name: miro
+        desc: Collaborative whiteboard
+        cask: true
+      - name: notion
+        desc: Notes & docs
+        cask: true
+      - name: obsidian
+        desc: Knowledge base
+        cask: true
+      - name: raycast
+        desc: Launcher & productivity
+        cask: true
+      - name: rectangle
+        desc: Window management (free)
+        cask: true
+      - name: rectangle-pro
+        desc: Window management (pro)
+        cask: true
+      - name: scroll-reverser
+        desc: Reverse scroll direction
+        cask: true
+      - name: shottr
+        desc: Screenshot & annotation
+        cask: true
+      - name: sketch
+        desc: Vector design
+        cask: true
+      - name: slack
+        desc: Team communication
+        cask: true
+      - name: stats
+        desc: System monitor in menubar
+        cask: true
+      - name: steam
+        desc: Gaming platform
+        cask: true
+      - name: telegram
+        desc: Messaging
+        cask: true
+      - name: ticktick
+        desc: Task management
+        cask: true
+
+  - name: JavaScript
+    icon: "📦"
+    packages:
+      - name: "@angular/cli"
+        desc: Angular CLI
+        npm: true
+      - name: create-react-app
+        desc: Create React apps
+        npm: true
+      - name: degit
+        desc: Scaffold from git repos
+        npm: true
+      - name: eslint
+        desc: JavaScript linter
+        npm: true
+      - name: firebase-tools
+        desc: Firebase CLI
+        npm: true
+      - name: nodemon
+        desc: Auto-restart Node apps
+        npm: true
+      - name: np
+        desc: Better npm publish
+        npm: true
+      - name: npm-check-updates
+        desc: Update package.json deps
+        npm: true
+      - name: pm2
+        desc: Node process manager
+        npm: true
+      - name: prettier
+        desc: Code formatter
+        npm: true
+      - name: serve
+        desc: Static file server
+        npm: true
+      - name: tsx
+        desc: TypeScript execute
+        npm: true
+      - name: typescript
+        desc: TypeScript compiler
+        npm: true
+      - name: vercel
+        desc: Vercel CLI
+        npm: true
+      - name: wrangler
+        desc: Cloudflare Workers CLI
+        npm: true
+
+  - name: VS Code Extensions
+    icon: "🧩"
+    packages:
+      - name: adpyke.codesnap
+        desc: Code screenshot tool
+        vscode: true
+      - name: dbaeumer.vscode-eslint
+        desc: ESLint integration
+        vscode: true
+      - name: donjayamanne.python-environment-manager
+        desc: Python environment manager
+        vscode: true
+      - name: dorzey.vscode-sqlfluff
+        desc: SQL linter
+        vscode: true
+      - name: eamodio.gitlens
+        desc: Git supercharged
+        vscode: true
+      - name: esbenp.prettier-vscode
+        desc: Prettier code formatter
+        vscode: true
+      - name: fill-labs.dependi
+        desc: Dependency manager
+        vscode: true
+      - name: github.copilot
+        desc: AI pair programmer
+        vscode: true
+      - name: github.copilot-chat
+        desc: AI chat assistant
+        vscode: true
+      - name: jock.svg
+        desc: SVG preview
+        vscode: true
+      - name: kruemelkatze.vscode-dashboard
+        desc: VS Code dashboard
+        vscode: true
+      - name: mechatroner.rainbow-csv
+        desc: CSV colorizer
+        vscode: true
+      - name: ms-python.isort
+        desc: Python import sorter
+        vscode: true
+      - name: ms-python.python
+        desc: Python language support
+        vscode: true
+      - name: ms-python.vscode-pylance
+        desc: Python language server
+        vscode: true
+      - name: ms-toolsai.jupyter
+        desc: Jupyter notebooks
+        vscode: true
+      - name: ms-toolsai.jupyter-renderers
+        desc: Jupyter renderers
+        vscode: true
+      - name: ms-vscode.live-server
+        desc: Live server for web dev
+        vscode: true
+      - name: ms-vscode.makefile-tools
+        desc: Makefile support
+        vscode: true
+      - name: njpwerner.autodocstring
+        desc: Python docstring generator
+        vscode: true
+      - name: njqdev.vscode-python-typehint
+        desc: Python type hints
+        vscode: true
+      - name: rangav.vscode-thunder-client
+        desc: API testing client
+        vscode: true
+      - name: redhat.vscode-yaml
+        desc: YAML language support
+        vscode: true
+      - name: samuelcolvin.jinjahtml
+        desc: Jinja template support
+        vscode: true
+      - name: searking.preview-vscode
+        desc: File preview
+        vscode: true
+      - name: tamasfe.even-better-toml
+        desc: TOML language support
+        vscode: true
+      - name: vscode-icons-team.vscode-icons
+        desc: File icons
+        vscode: true
+      - name: yzhang.markdown-all-in-one
+        desc: Markdown tools
+        vscode: true
+      - name: zhuangtongfa.material-theme
+        desc: Material theme
+        vscode: true

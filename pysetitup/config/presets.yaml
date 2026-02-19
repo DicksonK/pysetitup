@@ -1,0 +1,288 @@
+presets:
+  minimal:
+    name: minimal
+    description: CLI essentials for servers, containers, or minimalists
+    packages:
+      # Essential CLI tools
+      - git
+      - curl
+      - wget
+      - jq
+      - yq
+      - ripgrep
+      - fd
+      - bat
+      - fzf
+      - htop
+      - tree
+      - unzip
+      - watch
+      # Git tools
+      - gh
+      - git-delta
+    casks: []
+    npm: []
+    taps: []
+    vscode: []
+
+  developer:
+    name: developer
+    description: Ready-to-code Mac setup (Node, Python, Docker, VS Code)
+    packages:
+      # CLI Tools
+      - bat
+      - btop
+      - coreutils
+      - curl
+      - eza
+      - fd
+      - fzf
+      - git
+      - gh
+      - git-delta
+      - git-lfs
+      - htop
+      - jq
+      - lazygit
+      - pre-commit
+      - ripgrep
+      - tealdeer
+      - tree
+      - unzip
+      - watch
+      - wget
+      - yq
+      - zoxide
+      # Development
+      - cmake
+      - docker
+      - docker-compose
+      - gcc
+      - go
+      - graphviz
+      - httpie
+      - lazydocker
+      - make
+      - neovim
+      - node
+      - pandoc
+      - pnpm
+      - python
+      - python@3.12
+      - tmux
+      - uv
+      - yarn
+    casks:
+      - alacritty
+      - alfred
+      - anytype
+      - appcleaner
+      - arc
+      - chatgpt
+      - claude
+      - comfyui
+      - dropbox
+      - font-hack-nerd-font
+      - font-meslo-lg-nerd-font
+      - google-chrome
+      - iterm2
+      - lm-studio
+      - maccy
+      - notion
+      - orbstack
+      - postman
+      - raycast
+      - rectangle
+      - scroll-reverser
+      - stats
+      - steam
+      - tableplus
+      - ticktick
+      - visual-studio-code
+      - warp
+    npm:
+      - eslint
+      - nodemon
+      - prettier
+      - tsx
+      - typescript
+    taps: []
+    vscode:
+      - dbaeumer.vscode-eslint
+      - eamodio.gitlens
+      - esbenp.prettier-vscode
+      - ms-python.python
+      - ms-python.vscode-pylance
+      - redhat.vscode-yaml
+
+  full:
+    name: full
+    description: Complete dev environment (languages, DevOps, databases, AI)
+    packages:
+      # CLI Tools
+      - bat
+      - btop
+      - coreutils
+      - curl
+      - eza
+      - fd
+      - fzf
+      - git
+      - gh
+      - git-delta
+      - git-lfs
+      - htop
+      - jq
+      - lazygit
+      - pre-commit
+      - ripgrep
+      - stow
+      - tealdeer
+      - tig
+      - tree
+      - unzip
+      - watch
+      - wget
+      - yq
+      - z
+      - zoxide
+      # Development - Languages & Runtimes
+      - bun
+      - deno
+      - elixir
+      - gcc
+      - go
+      - llm
+      - neovim
+      - node
+      - ollama
+      - openjdk@11
+      - pnpm
+      - python
+      - python@3.10
+      - python@3.12
+      - rustup
+      - tmux
+      - uv
+      - yarn
+      - zig
+      # Development - Build Tools
+      - cmake
+      - graphviz
+      - make
+      - pandoc
+      - snappy
+      # DevOps & Cloud
+      - argocd
+      - awscli
+      - dive
+      - docker
+      - docker-compose
+      - helm
+      - httpie
+      - k9s
+      - kubectl
+      - lazydocker
+      - terraform
+      # Databases
+      - duckdb
+      - mysql
+      - postgresql
+      - redis
+      - sqlite
+    casks:
+      # Editors & Terminals
+      - alacritty
+      - cursor
+      - ghostty
+      - iterm2
+      - visual-studio-code
+      - warp
+      - zed
+      # Browsers
+      - arc
+      - brave-browser
+      - firefox
+      - google-chrome
+      # DevOps Tools
+      - ngrok
+      - orbstack
+      - postman
+      - proxyman
+      # Databases
+      - datagrip
+      - tableplus
+      # AI Tools
+      - chatgpt
+      - claude
+      - comfyui
+      - lm-studio
+      # Productivity & Design
+      - aldente
+      - alfred
+      - anytype
+      - appcleaner
+      - discord
+      - drawio
+      - dropbox
+      - figma
+      - font-hack-nerd-font
+      - font-meslo-lg-nerd-font
+      - iina
+      - keka
+      - maccy
+      - miro
+      - notion
+      - obsidian
+      - raycast
+      - rectangle
+      - rectangle-pro
+      - scroll-reverser
+      - shottr
+      - slack
+      - stats
+      - steam
+      - ticktick
+      # Data Science
+      - miniconda
+    npm:
+      - "@angular/cli"
+      - eslint
+      - nodemon
+      - npm-check-updates
+      - pm2
+      - prettier
+      - serve
+      - tsx
+      - typescript
+      - vercel
+      - wrangler
+    taps: []
+    vscode:
+      # AI & Copilot
+      - github.copilot
+      - github.copilot-chat
+      # Git
+      - eamodio.gitlens
+      # Languages
+      - dbaeumer.vscode-eslint
+      - esbenp.prettier-vscode
+      - ms-python.python
+      - ms-python.vscode-pylance
+      - ms-python.isort
+      - ms-toolsai.jupyter
+      - njpwerner.autodocstring
+      - njqdev.vscode-python-typehint
+      # File Support
+      - mechatroner.rainbow-csv
+      - redhat.vscode-yaml
+      - tamasfe.even-better-toml
+      - yzhang.markdown-all-in-one
+      # Tools
+      - adpyke.codesnap
+      - fill-labs.dependi
+      - ms-vscode.live-server
+      - rangav.vscode-thunder-client
+      # UI
+      - vscode-icons-team.vscode-icons
+      - zhuangtongfa.material-theme
