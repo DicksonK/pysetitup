@@ -3,10 +3,8 @@
 
 import argparse
 import asyncio
-import os
 import sys
 from pathlib import Path
-from typing import Optional
 
 from pysetitup.brew.client import BrewClient
 from pysetitup.config.loader import load_config
@@ -18,7 +16,7 @@ from pysetitup.ui.terminal_check import check_and_enforce_terminal_size
 from pysetitup.vscode.client import VSCodeClient
 
 
-async def get_installed_packages() -> dict[str, Optional[str]]:
+async def get_installed_packages() -> dict[str, str | None]:
     """
     Check which packages are already installed.
 
@@ -27,7 +25,7 @@ async def get_installed_packages() -> dict[str, Optional[str]]:
     dict[str, Optional[str]]
         Dictionary mapping package names to their installed versions
     """
-    installed_packages: dict[str, Optional[str]] = {}
+    installed_packages: dict[str, str | None] = {}
 
     try:
         brew_client = BrewClient()
@@ -61,11 +59,7 @@ async def get_installed_packages() -> dict[str, Optional[str]]:
 
         # Gather all results in parallel
         results = await asyncio.gather(
-            check_brew_formulae(),
-            check_brew_casks(),
-            check_npm(),
-            check_vscode(),
-            return_exceptions=True
+            check_brew_formulae(), check_brew_casks(), check_npm(), check_vscode(), return_exceptions=True
         )
 
         # Combine all results
@@ -81,14 +75,13 @@ async def get_installed_packages() -> dict[str, Optional[str]]:
 
 def parse_args():
     """Parse command-line arguments."""
-    parser = argparse.ArgumentParser(
-        description="PySetItUp Package Installer - Preview Mode (no actual installation)"
-    )
+    parser = argparse.ArgumentParser(description="PySetItUp Package Installer - Preview Mode (no actual installation)")
     parser.add_argument(
-        "-f", "--preset-file",
+        "-f",
+        "--preset-file",
         type=Path,
         metavar="FILE",
-        help="Path to custom preset YAML file (skips preset selection screen)"
+        help="Path to custom preset YAML file (skips preset selection screen)",
     )
     return parser.parse_args()
 
@@ -115,8 +108,7 @@ async def main():
     # Handle different workflows based on whether custom preset file is provided
     if args.preset_file:
         # Custom preset file provided - skip preset selection screen
-        custom_presets = [name for name in config.presets.keys()
-                         if name not in ["minimal", "developer", "full"]]
+        custom_presets = [name for name in config.presets.keys() if name not in ["minimal", "developer", "full"]]
 
         if not custom_presets:
             print("❌ No custom presets found in the provided file.")
@@ -134,12 +126,7 @@ async def main():
         print(f"{preset.description}\n")
 
         # Load preset packages for customization
-        initial_selection = set(
-            preset.packages +
-            preset.casks +
-            preset.npm +
-            preset.vscode
-        )
+        initial_selection = set(preset.packages + preset.casks + preset.npm + preset.vscode)
 
         print(f"Starting with {len(initial_selection)} packages from custom preset")
         print("Loading package selector...\n")
@@ -180,12 +167,7 @@ async def main():
                 sys.exit(1)
 
             # Get all packages from preset
-            selected = (
-                preset.packages +
-                preset.casks +
-                preset.npm +
-                preset.vscode
-            )
+            selected = preset.packages + preset.casks + preset.npm + preset.vscode
             print(f"✅ Selected {len(selected)} packages from '{preset_name}' preset")
 
             # Don't check packages here - let confirmation screen do it
@@ -199,12 +181,7 @@ async def main():
                 print(f"❌ Error: Preset '{preset_name}' not found.")
                 sys.exit(1)
 
-            initial_selection = set(
-                preset.packages +
-                preset.casks +
-                preset.npm +
-                preset.vscode
-            )
+            initial_selection = set(preset.packages + preset.casks + preset.npm + preset.vscode)
 
             print(f"Starting with {len(initial_selection)} packages from '{preset_name}' preset")
             print("Loading package selector...\n")
@@ -245,10 +222,7 @@ async def main():
 
     # Always pass the function to check installed packages dynamically
     # This ensures the confirmation screen shows the most up-to-date information
-    confirmed = await show_confirmation(
-        selected,
-        get_installed_packages_func=get_installed_packages
-    )
+    confirmed = await show_confirmation(selected, get_installed_packages_func=get_installed_packages)
 
     if not confirmed:
         print("\n❌ Installation cancelled by user.")

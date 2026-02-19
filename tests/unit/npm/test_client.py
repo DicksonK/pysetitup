@@ -1,12 +1,11 @@
 """Unit tests for pysetitup.npm.client module."""
 
-import asyncio
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, patch
 
 import pytest
 
 from pysetitup.npm.client import NpmClient
-from pysetitup.utils.errors import DependencyError, InstallationError
+from pysetitup.utils.errors import DependencyError
 
 
 class TestNpmClient:

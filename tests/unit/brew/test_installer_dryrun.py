@@ -37,11 +37,7 @@ class TestBrewInstallerDryRun:
         """Test install_packages in dry-run mode."""
         installer = BrewInstaller()
 
-        results = await installer.install_packages(
-            formulae=["git", "fzf"],
-            casks=["warp", "rectangle"],
-            dry_run=True
-        )
+        results = await installer.install_packages(formulae=["git", "fzf"], casks=["warp", "rectangle"], dry_run=True)
 
         assert len(results) == 4
         assert all(r.success for r in results)
@@ -53,10 +49,7 @@ class TestBrewInstallerDryRun:
         """Test tap_repositories in dry-run mode."""
         installer = BrewInstaller()
 
-        results = await installer.tap_repositories(
-            taps=["homebrew/cask-fonts", "homebrew/cask-versions"],
-            dry_run=True
-        )
+        results = await installer.tap_repositories(taps=["homebrew/cask-fonts", "homebrew/cask-versions"], dry_run=True)
 
         assert len(results) == 2
         assert all(r.success for r in results)

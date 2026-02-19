@@ -1,11 +1,11 @@
 """Unit tests for pysetitup.vscode.installer module."""
 
-from unittest.mock import AsyncMock, MagicMock
+from unittest.mock import AsyncMock
 
 import pytest
 
 from pysetitup.vscode.client import VSCodeClient
-from pysetitup.vscode.installer import InstallResult, VSCodeInstaller
+from pysetitup.vscode.installer import VSCodeInstaller
 
 
 class TestVSCodeInstaller:
@@ -61,9 +61,7 @@ class TestVSCodeInstaller:
         """Test extension installation when already installed."""
         mock_client = AsyncMock(spec=VSCodeClient)
         mock_client.is_installed.return_value = True
-        mock_client.list_extensions_with_versions.return_value = {
-            "ms-python.python": "2024.0.0"
-        }
+        mock_client.list_extensions_with_versions.return_value = {"ms-python.python": "2024.0.0"}
 
         installer = VSCodeInstaller(client=mock_client)
         extensions = ["ms-python.python"]

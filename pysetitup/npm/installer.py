@@ -1,12 +1,10 @@
 """npm package installer with batch install and fallback."""
 
 import asyncio
-from typing import Callable, Optional
+from collections.abc import Callable
 
 from pysetitup.installer.models import NpmInstallResult as InstallResult
 from pysetitup.npm.client import NpmClient
-from pysetitup.npm.parser import NpmParser
-from pysetitup.utils.errors import InstallationError
 
 
 class NpmInstaller:
@@ -14,7 +12,7 @@ class NpmInstaller:
 
     def __init__(
         self,
-        client: Optional[NpmClient] = None,
+        client: NpmClient | None = None,
         max_retries: int = 2,
     ):
         """
@@ -36,7 +34,7 @@ class NpmInstaller:
     async def install_packages(
         self,
         packages: list[str],
-        on_progress: Optional[Callable[[str, str], None]] = None,
+        on_progress: Callable[[str, str], None] | None = None,
         dry_run: bool = False,
     ) -> list[InstallResult]:
         """
@@ -76,9 +74,7 @@ class NpmInstaller:
 
         for attempt in range(1, self.max_retries + 1):
             try:
-                success, message = await self.client.install_global(
-                    packages, timeout=600.0
-                )
+                success, message = await self.client.install_global(packages, timeout=600.0)
 
                 if success:
                     if on_progress:
@@ -99,18 +95,14 @@ class NpmInstaller:
                 if attempt < self.max_retries:
                     backoff = 2**attempt
                     if on_progress:
-                        on_progress(
-                            "npm", f"⚠ Batch install failed, retrying in {backoff}s..."
-                        )
+                        on_progress("npm", f"⚠ Batch install failed, retrying in {backoff}s...")
                     await asyncio.sleep(backoff)
 
-            except Exception as e:
+            except Exception:
                 if attempt < self.max_retries:
                     backoff = 2**attempt
                     if on_progress:
-                        on_progress(
-                            "npm", f"⚠ Error in batch install, retrying in {backoff}s..."
-                        )
+                        on_progress("npm", f"⚠ Error in batch install, retrying in {backoff}s...")
                     await asyncio.sleep(backoff)
 
         # Batch install failed, fall back to sequential
@@ -122,7 +114,7 @@ class NpmInstaller:
     async def _install_sequential(
         self,
         packages: list[str],
-        on_progress: Optional[Callable[[str, str], None]] = None,
+        on_progress: Callable[[str, str], None] | None = None,
     ) -> list[InstallResult]:
         """
         Install packages one by one (fallback strategy).
@@ -148,9 +140,7 @@ class NpmInstaller:
 
                 if success:
                     if on_progress:
-                        status = (
-                            "✓ Already installed" if already_installed else "✓ Installed"
-                        )
+                        status = "✓ Already installed" if already_installed else "✓ Installed"
                         on_progress(pkg, status)
 
                     results.append(
@@ -193,7 +183,7 @@ class NpmInstaller:
     async def install_single(
         self,
         package: str,
-        on_progress: Optional[Callable[[str, str], None]] = None,
+        on_progress: Callable[[str, str], None] | None = None,
         dry_run: bool = False,
     ) -> InstallResult:
         """

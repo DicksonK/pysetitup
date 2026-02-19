@@ -1,7 +1,6 @@
 """Unit tests for pysetitup.system.env module."""
 
 import os
-import platform
 from pathlib import Path
 from unittest.mock import patch
 

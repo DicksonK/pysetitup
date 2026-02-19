@@ -1,6 +1,5 @@
 """Unit tests for pysetitup.config.loader module."""
 
-from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -97,7 +96,8 @@ class TestLoadExternalPresets:
     def test_load_external_presets_success(self, tmp_path) -> None:
         """Test loading valid external presets file."""
         presets_file = tmp_path / "my_presets.yaml"
-        presets_file.write_text("""
+        presets_file.write_text(
+            """
 presets:
   custom:
     name: custom
@@ -112,7 +112,8 @@ presets:
     taps: []
     vscode:
       - ms-python.python
-""")
+"""
+        )
 
         presets = load_external_presets(presets_file)
 
@@ -143,7 +144,8 @@ presets:
     def test_load_config_with_external_presets(self, tmp_path) -> None:
         """Test load_config merges external presets with embedded ones."""
         presets_file = tmp_path / "my_presets.yaml"
-        presets_file.write_text("""
+        presets_file.write_text(
+            """
 presets:
   custom:
     name: custom
@@ -154,7 +156,8 @@ presets:
     npm: []
     taps: []
     vscode: []
-""")
+"""
+        )
 
         config = load_config(external_presets_file=presets_file)
 
@@ -169,7 +172,8 @@ presets:
     def test_load_config_external_overrides_embedded(self, tmp_path) -> None:
         """Test that external presets override embedded ones with same name."""
         presets_file = tmp_path / "override.yaml"
-        presets_file.write_text("""
+        presets_file.write_text(
+            """
 presets:
   minimal:
     name: minimal
@@ -180,7 +184,8 @@ presets:
     npm: []
     taps: []
     vscode: []
-""")
+"""
+        )
 
         config = load_config(external_presets_file=presets_file)
 

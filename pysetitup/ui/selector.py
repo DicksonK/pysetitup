@@ -1,7 +1,6 @@
 """Interactive package selector TUI using Textual DataTable."""
 
 import asyncio
-from typing import Optional
 
 from textual import on, work
 from textual.app import App, ComposeResult
@@ -116,8 +115,8 @@ class PackageSelector(App):
 
     def __init__(
         self,
-        config: Optional[Config] = None,
-        preset_packages: Optional[set[str]] = None,
+        config: Config | None = None,
+        preset_packages: set[str] | None = None,
     ):
         super().__init__()
         self.config = config or load_config()
@@ -128,10 +127,10 @@ class PackageSelector(App):
         self.search_active = False
 
         # Installation status cache: package_name -> version or None
-        self.installed_packages: dict[str, Optional[str]] = {}
-        self.brew_client: Optional[BrewClient] = None
-        self.npm_client: Optional[NpmClient] = None
-        self.vscode_client: Optional[VSCodeClient] = None
+        self.installed_packages: dict[str, str | None] = {}
+        self.brew_client: BrewClient | None = None
+        self.npm_client: NpmClient | None = None
+        self.vscode_client: VSCodeClient | None = None
 
     def compose(self) -> ComposeResult:
         """Compose the TUI layout."""
@@ -273,18 +272,14 @@ class PackageSelector(App):
 
     def action_next_category(self) -> None:
         """Switch to next category."""
-        self.current_category_index = (self.current_category_index + 1) % len(
-            self.categories
-        )
+        self.current_category_index = (self.current_category_index + 1) % len(self.categories)
         self.current_category = self.categories[self.current_category_index]
         self._update_category_tabs()
         self._update_table()
 
     def action_prev_category(self) -> None:
         """Switch to previous category."""
-        self.current_category_index = (self.current_category_index - 1) % len(
-            self.categories
-        )
+        self.current_category_index = (self.current_category_index - 1) % len(self.categories)
         self.current_category = self.categories[self.current_category_index]
         self._update_category_tabs()
         self._update_table()
@@ -431,8 +426,8 @@ class PackageSelector(App):
 
 
 async def select_packages(
-    config: Optional[Config] = None,
-    preset_packages: Optional[set[str]] = None,
+    config: Config | None = None,
+    preset_packages: set[str] | None = None,
 ) -> list[str]:
     """
     Run the interactive package selector TUI.

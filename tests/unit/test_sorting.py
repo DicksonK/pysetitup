@@ -18,7 +18,7 @@ class TestSortPackages:
             taps=[],
             casks=["warp", "cursor"],
             npm=["typescript", "eslint"],
-            vscode=["ms-python.python", "dbaeumer.vscode-eslint"]
+            vscode=["ms-python.python", "dbaeumer.vscode-eslint"],
         )
 
         assert result.packages == ["fzf", "git", "zsh"]
@@ -28,13 +28,7 @@ class TestSortPackages:
 
     def test_sort_packages_empty(self) -> None:
         """Test sorting with empty lists."""
-        result = sort_packages(
-            packages=[],
-            taps=[],
-            casks=[],
-            npm=[],
-            vscode=[]
-        )
+        result = sort_packages(packages=[], taps=[], casks=[], npm=[], vscode=[])
 
         assert result.packages == []
         assert result.casks == []
@@ -43,24 +37,14 @@ class TestSortPackages:
 
     def test_sort_packages_case_insensitive(self) -> None:
         """Test case-insensitive sorting."""
-        result = sort_packages(
-            packages=["Zsh", "git", "FZF"],
-            taps=[],
-            casks=[],
-            npm=[],
-            vscode=[]
-        )
+        result = sort_packages(packages=["Zsh", "git", "FZF"], taps=[], casks=[], npm=[], vscode=[])
 
         assert result.packages == ["FZF", "git", "Zsh"]
 
     def test_sort_with_taps(self) -> None:
         """Test sorting with taps."""
         result = sort_packages(
-            packages=[],
-            taps=["homebrew/cask-versions", "homebrew/cask-fonts"],
-            casks=[],
-            npm=[],
-            vscode=[]
+            packages=[], taps=["homebrew/cask-versions", "homebrew/cask-fonts"], casks=[], npm=[], vscode=[]
         )
 
         assert result.taps == ["homebrew/cask-fonts", "homebrew/cask-versions"]
@@ -114,7 +98,7 @@ class TestFormatPackageSummary:
             taps=["homebrew/cask-fonts"],
             casks=["warp"],
             npm=["typescript"],
-            vscode=["ms-python.python"]
+            vscode=["ms-python.python"],
         )
 
         summary = format_package_summary(sorted_pkgs)
@@ -127,13 +111,7 @@ class TestFormatPackageSummary:
 
     def test_format_package_summary_skip_empty(self) -> None:
         """Test that empty lists are skipped."""
-        sorted_pkgs = SortedPackages(
-            packages=["git"],
-            taps=[],
-            casks=[],
-            npm=[],
-            vscode=[]
-        )
+        sorted_pkgs = SortedPackages(packages=["git"], taps=[], casks=[], npm=[], vscode=[])
 
         summary = format_package_summary(sorted_pkgs)
 
@@ -146,11 +124,7 @@ class TestFormatPackageSummary:
     def test_format_package_summary_order(self) -> None:
         """Test that types appear in correct order."""
         sorted_pkgs = SortedPackages(
-            packages=["git"],
-            taps=["homebrew/tap"],
-            casks=["warp"],
-            npm=["typescript"],
-            vscode=["ms-python.python"]
+            packages=["git"], taps=["homebrew/tap"], casks=["warp"], npm=["typescript"], vscode=["ms-python.python"]
         )
 
         summary = format_package_summary(sorted_pkgs)
@@ -165,13 +139,7 @@ class TestFormatPackageSummary:
 
     def test_format_package_summary_empty(self) -> None:
         """Test formatting with all empty lists."""
-        sorted_pkgs = SortedPackages(
-            packages=[],
-            taps=[],
-            casks=[],
-            npm=[],
-            vscode=[]
-        )
+        sorted_pkgs = SortedPackages(packages=[], taps=[], casks=[], npm=[], vscode=[])
 
         summary = format_package_summary(sorted_pkgs)
 

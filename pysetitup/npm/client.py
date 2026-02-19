@@ -2,7 +2,6 @@
 
 import asyncio
 import shutil
-from typing import Optional
 
 from pysetitup.utils.errors import DependencyError, InstallationError
 
@@ -10,7 +9,7 @@ from pysetitup.utils.errors import DependencyError, InstallationError
 class NpmClient:
     """Client for executing npm commands."""
 
-    def __init__(self, npm_path: Optional[str] = None):
+    def __init__(self, npm_path: str | None = None):
         """
         Initialize NpmClient.
 
@@ -27,7 +26,7 @@ class NpmClient:
                 message="npm is not installed. Install Node.js from https://nodejs.org or via Homebrew: brew install node",
             )
 
-    def _find_npm(self) -> Optional[str]:
+    def _find_npm(self) -> str | None:
         """
         Find the npm executable in PATH.
 
@@ -40,7 +39,7 @@ class NpmClient:
         self,
         args: list[str],
         check: bool = True,
-        timeout: Optional[float] = None,
+        timeout: float | None = None,
     ) -> tuple[int, str, str]:
         """
         Run an npm command asynchronously.
@@ -66,9 +65,7 @@ class NpmClient:
                 stderr=asyncio.subprocess.PIPE,
             )
 
-            stdout_bytes, stderr_bytes = await asyncio.wait_for(
-                proc.communicate(), timeout=timeout
-            )
+            stdout_bytes, stderr_bytes = await asyncio.wait_for(proc.communicate(), timeout=timeout)
 
             stdout = stdout_bytes.decode("utf-8", errors="replace")
             stderr = stderr_bytes.decode("utf-8", errors="replace")
@@ -79,9 +76,7 @@ class NpmClient:
                 pkg_name = args[-1] if args else "unknown"
                 raise InstallationError(
                     package=pkg_name,
-                    message=f"npm command failed: {' '.join(args)}\n"
-                    f"Exit code: {returncode}\n"
-                    f"Stderr: {stderr}",
+                    message=f"npm command failed: {' '.join(args)}\n" f"Exit code: {returncode}\n" f"Stderr: {stderr}",
                 )
 
             return returncode, stdout, stderr
@@ -93,9 +88,7 @@ class NpmClient:
                 await proc.wait()
             raise
 
-    async def install_global(
-        self, packages: list[str], timeout: Optional[float] = 300.0
-    ) -> tuple[bool, str]:
+    async def install_global(self, packages: list[str], timeout: float | None = 300.0) -> tuple[bool, str]:
         """
         Install npm packages globally (batch install).
 
@@ -118,9 +111,7 @@ class NpmClient:
         except asyncio.TimeoutError:
             return False, f"Installation timed out after {timeout}s"
 
-    async def install_single(
-        self, package: str, timeout: Optional[float] = 300.0
-    ) -> tuple[bool, str]:
+    async def install_single(self, package: str, timeout: float | None = 300.0) -> tuple[bool, str]:
         """
         Install a single npm package globally.
 
@@ -132,9 +123,7 @@ class NpmClient:
             Tuple of (success, message)
         """
         try:
-            _, stdout, stderr = await self._run_command(
-                ["install", "--global", package], check=True, timeout=timeout
-            )
+            _, stdout, stderr = await self._run_command(["install", "--global", package], check=True, timeout=timeout)
             return True, f"Installed {package}"
         except InstallationError as e:
             return False, str(e)
@@ -152,9 +141,7 @@ class NpmClient:
             List of installed package names
         """
         try:
-            _, stdout, _ = await self._run_command(
-                ["list", "--global", "--depth", str(depth), "--json"], check=True
-            )
+            _, stdout, _ = await self._run_command(["list", "--global", "--depth", str(depth), "--json"], check=True)
             import json
 
             data = json.loads(stdout)
@@ -174,9 +161,7 @@ class NpmClient:
             Dictionary mapping package name to version
         """
         try:
-            _, stdout, _ = await self._run_command(
-                ["list", "--global", "--depth", str(depth), "--json"], check=True
-            )
+            _, stdout, _ = await self._run_command(["list", "--global", "--depth", str(depth), "--json"], check=True)
             import json
 
             data = json.loads(stdout)
@@ -201,9 +186,7 @@ class NpmClient:
             Tuple of (success, message)
         """
         try:
-            _, stdout, stderr = await self._run_command(
-                ["uninstall", "--global", package], check=True
-            )
+            _, stdout, stderr = await self._run_command(["uninstall", "--global", package], check=True)
             return True, f"Uninstalled {package}"
         except InstallationError as e:
             return False, str(e)
@@ -217,7 +200,8 @@ class NpmClient:
         """
         try:
             _, stdout, _ = await self._run_command(
-                ["outdated", "--global", "--json"], check=False  # outdated returns non-zero if packages found
+                ["outdated", "--global", "--json"],
+                check=False,  # outdated returns non-zero if packages found
             )
             import json
 
@@ -238,7 +222,7 @@ class NpmClient:
         except (json.JSONDecodeError, AttributeError):
             return []
 
-    async def update_global(self, package: Optional[str] = None) -> tuple[bool, str]:
+    async def update_global(self, package: str | None = None) -> tuple[bool, str]:
         """
         Update global npm package(s).
 

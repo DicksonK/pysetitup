@@ -1,7 +1,6 @@
 """Unit tests for pysetitup.vscode.client module."""
 
-import asyncio
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, patch
 
 import pytest
 
@@ -141,9 +140,7 @@ class TestVSCodeClient:
             side_effect=FileNotFoundError("command not found"),
         ):
             # Mock the _run_command to return False
-            with patch.object(
-                client, "_run_command", side_effect=CommandError("VS Code CLI not found")
-            ):
+            with patch.object(client, "_run_command", side_effect=CommandError("VS Code CLI not found")):
                 installed = await client.is_installed()
 
         assert installed is False

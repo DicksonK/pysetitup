@@ -1,11 +1,11 @@
 """Unit tests for pysetitup.brew.installer module."""
 
 import asyncio
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from pysetitup.brew.installer import BrewInstaller, InstallResult
+from pysetitup.brew.installer import BrewInstaller
 
 
 class TestBrewInstaller:
@@ -30,9 +30,7 @@ class TestBrewInstaller:
     async def test_install_formula_already_installed(self) -> None:
         """Test install_formula detects already installed packages."""
         mock_client = MagicMock()
-        mock_client.install_formula = AsyncMock(
-            return_value=(True, "git is already installed")
-        )
+        mock_client.install_formula = AsyncMock(return_value=(True, "git is already installed"))
 
         installer = BrewInstaller(client=mock_client)
         result = await installer.install_formula("git")
@@ -63,9 +61,7 @@ class TestBrewInstaller:
     async def test_install_formula_retry_exhausted(self) -> None:
         """Test install_formula fails after max retries."""
         mock_client = MagicMock()
-        mock_client.install_formula = AsyncMock(
-            return_value=(False, "Network error")
-        )
+        mock_client.install_formula = AsyncMock(return_value=(False, "Network error"))
 
         installer = BrewInstaller(client=mock_client, max_retries=2)
         result = await installer.install_formula("git")
@@ -149,9 +145,7 @@ class TestBrewInstaller:
         mock_client.install_cask = AsyncMock(return_value=(True, "Installed"))
 
         installer = BrewInstaller(client=mock_client, max_concurrent=5)
-        results = await installer.install_packages(
-            formulae=["git", "node"], casks=["docker", "vscode"]
-        )
+        results = await installer.install_packages(formulae=["git", "node"], casks=["docker", "vscode"])
 
         assert len(results) == 4
         assert all(r.success for r in results)
@@ -173,9 +167,7 @@ class TestBrewInstaller:
         mock_client.install_cask = AsyncMock(return_value=(True, "Installed"))
 
         installer = BrewInstaller(client=mock_client, max_concurrent=5)
-        results = await installer.install_packages(
-            formulae=["git", "nonexistent"], casks=["docker"]
-        )
+        results = await installer.install_packages(formulae=["git", "nonexistent"], casks=["docker"])
 
         assert len(results) == 3
         assert results[0].success is True  # git
@@ -195,9 +187,7 @@ class TestBrewInstaller:
             progress_calls.append((pkg, status))
 
         installer = BrewInstaller(client=mock_client)
-        await installer.install_packages(
-            formulae=["git"], casks=["docker"], on_progress=on_progress
-        )
+        await installer.install_packages(formulae=["git"], casks=["docker"], on_progress=on_progress)
 
         # Should have progress calls for both packages
         assert len(progress_calls) > 0
@@ -226,9 +216,7 @@ class TestBrewInstaller:
         mock_client.install_cask = AsyncMock(return_value=(True, "Installed"))
 
         installer = BrewInstaller(client=mock_client, max_concurrent=2)
-        await installer.install_packages(
-            formulae=["pkg1", "pkg2", "pkg3", "pkg4"], casks=[]
-        )
+        await installer.install_packages(formulae=["pkg1", "pkg2", "pkg3", "pkg4"], casks=[])
 
         # Max concurrent should not exceed limit
         assert max_concurrent_seen <= 2
@@ -260,9 +248,7 @@ class TestBrewInstaller:
         mock_client.tap = AsyncMock(side_effect=tap_side_effect)
 
         installer = BrewInstaller(client=mock_client)
-        results = await installer.tap_repositories(
-            ["homebrew/cask", "invalid/tap"]
-        )
+        results = await installer.tap_repositories(["homebrew/cask", "invalid/tap"])
 
         assert len(results) == 2
         assert results[0].success is True
@@ -280,9 +266,7 @@ class TestBrewInstaller:
             progress_calls.append((tap, status))
 
         installer = BrewInstaller(client=mock_client)
-        await installer.tap_repositories(
-            ["homebrew/cask"], on_progress=on_progress
-        )
+        await installer.tap_repositories(["homebrew/cask"], on_progress=on_progress)
 
         assert len(progress_calls) == 2
         assert progress_calls[0] == ("homebrew/cask", "Tapping...")
@@ -292,9 +276,7 @@ class TestBrewInstaller:
     async def test_exponential_backoff(self) -> None:
         """Test retry uses exponential backoff."""
         mock_client = MagicMock()
-        mock_client.install_formula = AsyncMock(
-            return_value=(False, "Network error")
-        )
+        mock_client.install_formula = AsyncMock(return_value=(False, "Network error"))
 
         start_time = asyncio.get_event_loop().time()
 

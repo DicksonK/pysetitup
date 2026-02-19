@@ -1,10 +1,8 @@
 """State management for PySetItUp."""
 
 import json
-import os
 from datetime import datetime
 from pathlib import Path
-from typing import Optional
 
 from pysetitup.state.models import InstallState, PackageType
 from pysetitup.system.env import ensure_pysetitup_dir
@@ -14,7 +12,7 @@ from pysetitup.utils.errors import StateError
 class StateManager:
     """Manages PySetItUp installation state persistence."""
 
-    def __init__(self, state_file: Optional[str] = None) -> None:
+    def __init__(self, state_file: str | None = None) -> None:
         """
         Initialize the state manager.
 
@@ -28,7 +26,7 @@ class StateManager:
             pysetitup_dir = ensure_pysetitup_dir()
             self.state_file = Path(pysetitup_dir) / "state.json"
 
-        self._state: Optional[InstallState] = None
+        self._state: InstallState | None = None
 
     def load_state(self) -> InstallState:
         """
@@ -45,14 +43,14 @@ class StateManager:
             return self._state
 
         try:
-            with open(self.state_file, "r") as f:
+            with open(self.state_file) as f:
                 data = json.load(f)
                 self._state = InstallState.model_validate(data)
                 return self._state
         except Exception as e:
-            raise StateError(f"Failed to load state from {self.state_file}: {e}")
+            raise StateError(f"Failed to load state from {self.state_file}: {e}") from e
 
-    def save_state(self, state: Optional[InstallState] = None) -> None:
+    def save_state(self, state: InstallState | None = None) -> None:
         """
         Save state to file.
 
@@ -82,7 +80,7 @@ class StateManager:
                     default=str,
                 )
         except Exception as e:
-            raise StateError(f"Failed to save state to {self.state_file}: {e}")
+            raise StateError(f"Failed to save state to {self.state_file}: {e}") from e
 
     def get_state(self) -> InstallState:
         """

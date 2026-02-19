@@ -5,7 +5,7 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from pysetitup.npm.installer import InstallResult, NpmInstaller
+from pysetitup.npm.installer import NpmInstaller
 
 
 class TestNpmInstaller:
@@ -15,14 +15,10 @@ class TestNpmInstaller:
     async def test_install_packages_batch_success(self) -> None:
         """Test install_packages successfully installs via batch."""
         mock_client = MagicMock()
-        mock_client.install_global = AsyncMock(
-            return_value=(True, "added 3 packages")
-        )
+        mock_client.install_global = AsyncMock(return_value=(True, "added 3 packages"))
 
         installer = NpmInstaller(client=mock_client)
-        results = await installer.install_packages(
-            ["typescript", "eslint", "prettier"]
-        )
+        results = await installer.install_packages(["typescript", "eslint", "prettier"])
 
         assert len(results) == 3
         assert all(r.success for r in results)
@@ -74,9 +70,7 @@ class TestNpmInstaller:
         """Test install_packages falls back on exception."""
         mock_client = MagicMock()
         # Batch install raises exception
-        mock_client.install_global = AsyncMock(
-            side_effect=Exception("Connection timeout")
-        )
+        mock_client.install_global = AsyncMock(side_effect=Exception("Connection timeout"))
         # Sequential installs succeed
         mock_client.install_single = AsyncMock(return_value=(True, "Installed"))
 
@@ -106,9 +100,7 @@ class TestNpmInstaller:
     async def test_install_packages_with_progress_callback(self) -> None:
         """Test install_packages calls progress callback for batch."""
         mock_client = MagicMock()
-        mock_client.install_global = AsyncMock(
-            return_value=(True, "added 2 packages")
-        )
+        mock_client.install_global = AsyncMock(return_value=(True, "added 2 packages"))
 
         progress_calls = []
 
@@ -116,9 +108,7 @@ class TestNpmInstaller:
             progress_calls.append((pkg, status))
 
         installer = NpmInstaller(client=mock_client)
-        await installer.install_packages(
-            ["typescript", "eslint"], on_progress=on_progress
-        )
+        await installer.install_packages(["typescript", "eslint"], on_progress=on_progress)
 
         # Should have progress calls for batch install
         assert len(progress_calls) >= 1
@@ -143,9 +133,7 @@ class TestNpmInstaller:
     async def test_install_sequential_already_installed(self) -> None:
         """Test _install_sequential detects already installed packages."""
         mock_client = MagicMock()
-        mock_client.install_single = AsyncMock(
-            return_value=(True, "already installed typescript@5.0.0")
-        )
+        mock_client.install_single = AsyncMock(return_value=(True, "already installed typescript@5.0.0"))
 
         installer = NpmInstaller(client=mock_client)
         results = await installer._install_sequential(["typescript"])
@@ -196,9 +184,7 @@ class TestNpmInstaller:
     async def test_install_sequential_exception_handling(self) -> None:
         """Test _install_sequential handles exceptions gracefully."""
         mock_client = MagicMock()
-        mock_client.install_single = AsyncMock(
-            side_effect=Exception("Connection timeout")
-        )
+        mock_client.install_single = AsyncMock(side_effect=Exception("Connection timeout"))
 
         installer = NpmInstaller(client=mock_client)
         results = await installer._install_sequential(["typescript"])
@@ -211,9 +197,7 @@ class TestNpmInstaller:
     async def test_install_single_success(self) -> None:
         """Test install_single successfully installs a package."""
         mock_client = MagicMock()
-        mock_client.install_single = AsyncMock(
-            return_value=(True, "added typescript@5.0.0")
-        )
+        mock_client.install_single = AsyncMock(return_value=(True, "added typescript@5.0.0"))
 
         installer = NpmInstaller(client=mock_client)
         result = await installer.install_single("typescript")
@@ -228,9 +212,7 @@ class TestNpmInstaller:
     async def test_install_single_already_installed(self) -> None:
         """Test install_single detects already installed packages."""
         mock_client = MagicMock()
-        mock_client.install_single = AsyncMock(
-            return_value=(True, "typescript is already installed")
-        )
+        mock_client.install_single = AsyncMock(return_value=(True, "typescript is already installed"))
 
         installer = NpmInstaller(client=mock_client)
         result = await installer.install_single("typescript")
@@ -242,9 +224,7 @@ class TestNpmInstaller:
     async def test_install_single_failure(self) -> None:
         """Test install_single handles installation failure."""
         mock_client = MagicMock()
-        mock_client.install_single = AsyncMock(
-            return_value=(False, "Package not found")
-        )
+        mock_client.install_single = AsyncMock(return_value=(False, "Package not found"))
 
         installer = NpmInstaller(client=mock_client)
         result = await installer.install_single("nonexistent")
@@ -257,9 +237,7 @@ class TestNpmInstaller:
     async def test_install_single_with_progress(self) -> None:
         """Test install_single calls progress callback."""
         mock_client = MagicMock()
-        mock_client.install_single = AsyncMock(
-            return_value=(True, "added typescript@5.0.0")
-        )
+        mock_client.install_single = AsyncMock(return_value=(True, "added typescript@5.0.0"))
 
         progress_calls = []
 
@@ -277,9 +255,7 @@ class TestNpmInstaller:
     async def test_install_single_exception(self) -> None:
         """Test install_single handles exceptions."""
         mock_client = MagicMock()
-        mock_client.install_single = AsyncMock(
-            side_effect=Exception("Connection timeout")
-        )
+        mock_client.install_single = AsyncMock(side_effect=Exception("Connection timeout"))
 
         installer = NpmInstaller(client=mock_client)
         result = await installer.install_single("typescript")

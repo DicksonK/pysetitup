@@ -4,8 +4,9 @@
 import argparse
 import asyncio
 import sys
+from collections.abc import Awaitable, Callable
 from pathlib import Path
-from typing import Awaitable, Callable, Optional, TypeVar
+from typing import TypeVar
 
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn
@@ -26,12 +27,10 @@ from pysetitup.vscode.client import VSCodeClient
 from pysetitup.vscode.installer import VSCodeInstaller
 
 # Type variable for install results
-InstallResultT = TypeVar(
-    "InstallResultT", BrewInstallResult, NpmInstallResult, VSCodeInstallResult
-)
+InstallResultT = TypeVar("InstallResultT", BrewInstallResult, NpmInstallResult, VSCodeInstallResult)
 
 
-async def get_installed_packages() -> dict[str, Optional[str]]:
+async def get_installed_packages() -> dict[str, str | None]:
     """
     Check which packages are already installed.
 
@@ -40,7 +39,7 @@ async def get_installed_packages() -> dict[str, Optional[str]]:
     dict[str, Optional[str]]
         Dictionary mapping package names to their installed versions
     """
-    installed_packages: dict[str, Optional[str]] = {}
+    installed_packages: dict[str, str | None] = {}
 
     try:
         brew_client = BrewClient()
@@ -48,8 +47,6 @@ async def get_installed_packages() -> dict[str, Optional[str]]:
         vscode_client = VSCodeClient()
 
         # Run all checks in parallel for better performance
-        tasks = []
-
         async def check_brew_formulae():
             try:
                 return await brew_client.list_formulae_versions()
@@ -76,11 +73,7 @@ async def get_installed_packages() -> dict[str, Optional[str]]:
 
         # Gather all results in parallel
         results = await asyncio.gather(
-            check_brew_formulae(),
-            check_brew_casks(),
-            check_npm(),
-            check_vscode(),
-            return_exceptions=True
+            check_brew_formulae(), check_brew_casks(), check_npm(), check_vscode(), return_exceptions=True
         )
 
         # Combine all results
@@ -147,9 +140,7 @@ async def install_with_progress(
         success_count = sum(1 for r in sorted_results if r.success)
         fail_count = len(sorted_results) - success_count
 
-        console.print(
-            f"\n  [green]✓ {success_count} {package_type} installed successfully[/green]"
-        )
+        console.print(f"\n  [green]✓ {success_count} {package_type} installed successfully[/green]")
         if fail_count > 0:
             console.print(f"  [red]✗ {fail_count} {package_type} failed[/red]")
 
@@ -170,20 +161,15 @@ def debug_pause(console: Console, message: str = "Press ENTER to continue..."):
 
 def parse_args():
     """Parse command-line arguments."""
-    parser = argparse.ArgumentParser(
-        description="PySetItUp Package Installer - Set up your macOS dev environment"
-    )
+    parser = argparse.ArgumentParser(description="PySetItUp Package Installer - Set up your macOS dev environment")
     parser.add_argument(
-        "-f", "--preset-file",
+        "-f",
+        "--preset-file",
         type=Path,
         metavar="FILE",
-        help="Path to custom preset YAML file (skips preset selection screen)"
+        help="Path to custom preset YAML file (skips preset selection screen)",
     )
-    parser.add_argument(
-        "--debug",
-        action="store_true",
-        help="Enable debug mode with pauses between screens"
-    )
+    parser.add_argument("--debug", action="store_true", help="Enable debug mode with pauses between screens")
     return parser.parse_args()
 
 
@@ -220,8 +206,7 @@ async def main():
     if args.preset_file:
         # Custom preset file provided - skip preset selection screen
         # Get the first preset from the loaded config (assumes custom file has one preset)
-        custom_presets = [name for name in config.presets.keys()
-                         if name not in ["minimal", "developer", "full"]]
+        custom_presets = [name for name in config.presets.keys() if name not in ["minimal", "developer", "full"]]
 
         if not custom_presets:
             console.print("[red]❌ No custom presets found in the provided file.[/red]")
@@ -239,12 +224,7 @@ async def main():
         console.print(f"[dim]{preset.description}[/dim]\n")
 
         # Load preset packages for customization
-        initial_selection = set(
-            preset.packages +
-            preset.casks +
-            preset.npm +
-            preset.vscode
-        )
+        initial_selection = set(preset.packages + preset.casks + preset.npm + preset.vscode)
 
         console.print(f"Starting with {len(initial_selection)} packages from custom preset")
         console.print("[dim]Loading package selector...[/dim]\n")
@@ -258,7 +238,6 @@ async def main():
             sys.exit(0)
 
         console.print(f"\n[green]✅ Selected {len(selected)} packages[/green]")
-        installed_packages = app.installed_packages
         action = "customize"  # Mark as customize workflow
     else:
         # Normal workflow - show preset selection screen
@@ -278,8 +257,6 @@ async def main():
             debug_pause(console, "🐛 Preset selected. Press ENTER to continue...")
 
         # Handle different actions
-        installed_packages = {}
-
         if action == "install":
             # Install preset directly without customization
             console.print(f"\n[bold]📦 Installing '{preset_name}' preset directly...[/bold]")
@@ -289,16 +266,8 @@ async def main():
                 sys.exit(1)
 
             # Get all packages from preset
-            selected = (
-                preset.packages +
-                preset.casks +
-                preset.npm +
-                preset.vscode
-            )
+            selected = preset.packages + preset.casks + preset.npm + preset.vscode
             console.print(f"[green]✅ Selected {len(selected)} packages from '{preset_name}' preset[/green]")
-
-            # Don't check packages here - let confirmation screen do it
-            installed_packages = {}
 
         elif action == "customize":
             # Load preset and allow customization
@@ -308,12 +277,7 @@ async def main():
                 console.print(f"[red]❌ Error: Preset '{preset_name}' not found.[/red]")
                 sys.exit(1)
 
-            initial_selection = set(
-                preset.packages +
-                preset.casks +
-                preset.npm +
-                preset.vscode
-            )
+            initial_selection = set(preset.packages + preset.casks + preset.npm + preset.vscode)
 
             console.print(f"Starting with {len(initial_selection)} packages from '{preset_name}' preset")
             console.print("[dim]Loading package selector...[/dim]\n")
@@ -327,7 +291,6 @@ async def main():
                 sys.exit(0)
 
             console.print(f"\n[green]✅ Selected {len(selected)} packages[/green]")
-            installed_packages = app.installed_packages
 
         elif action == "skip":
             # Skip preset selection and go to package selector
@@ -343,7 +306,6 @@ async def main():
                 sys.exit(0)
 
             console.print(f"\n[green]✅ Selected {len(selected)} packages[/green]")
-            installed_packages = app.installed_packages
 
         else:
             console.print(f"\n[red]❌ Unknown action: {action}[/red]")
@@ -412,10 +374,7 @@ async def main():
 
     # Always pass the function to check installed packages dynamically
     # This ensures the confirmation screen shows the most up-to-date information
-    confirmed = await show_confirmation(
-        selected,
-        get_installed_packages_func=get_installed_packages
-    )
+    confirmed = await show_confirmation(selected, get_installed_packages_func=get_installed_packages)
 
     if not confirmed:
         console.print("\n[red]❌ Installation cancelled by user.[/red]")

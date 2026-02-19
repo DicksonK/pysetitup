@@ -1,6 +1,5 @@
 """Shared installation result models using Pydantic for validation."""
 
-from typing import Optional
 
 from pydantic import BaseModel, Field, field_validator
 
@@ -29,7 +28,7 @@ class BrewInstallResult(BaseModel):
     success: bool = Field(..., description="Installation success status")
     message: str = Field(default="", description="Installation message")
     already_installed: bool = Field(default=False, description="Already installed flag")
-    version: Optional[str] = Field(default=None, description="Package version")
+    version: str | None = Field(default=None, description="Package version")
     attempts: int = Field(default=1, ge=0, description="Installation attempts")
 
     @field_validator("package")
@@ -65,7 +64,7 @@ class NpmInstallResult(BaseModel):
     success: bool = Field(..., description="Installation success status")
     message: str = Field(default="", description="Installation message")
     already_installed: bool = Field(default=False, description="Already installed flag")
-    version: Optional[str] = Field(default=None, description="Package version")
+    version: str | None = Field(default=None, description="Package version")
     batch: bool = Field(default=False, description="Batch installation flag")
 
     @field_validator("package")
@@ -100,8 +99,8 @@ class VSCodeInstallResult(BaseModel):
     extension_id: str = Field(..., min_length=1, description="VS Code extension ID")
     success: bool = Field(..., description="Installation success status")
     already_installed: bool = Field(default=False, description="Already installed flag")
-    error: Optional[str] = Field(default=None, description="Error message")
-    version: Optional[str] = Field(default=None, description="Extension version")
+    error: str | None = Field(default=None, description="Error message")
+    version: str | None = Field(default=None, description="Extension version")
 
     @field_validator("extension_id")
     @classmethod

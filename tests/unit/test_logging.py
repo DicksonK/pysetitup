@@ -4,12 +4,10 @@ import logging
 from io import StringIO
 from unittest.mock import patch
 
-import pytest
 from rich.console import Console
 
 from pysetitup.utils.logging import (
     CATPPUCCIN_THEME,
-    console,
     get_logger,
     print_error,
     print_info,

@@ -1,10 +1,9 @@
 """Interactive preset selector TUI using Textual."""
 
-from typing import Optional
 
 from textual.app import App, ComposeResult
 from textual.binding import Binding
-from textual.containers import Container, Horizontal, Vertical
+from textual.containers import Container, Horizontal
 from textual.message import Message
 from textual.widgets import Button, Footer, Header, Label, Static
 
@@ -198,10 +197,10 @@ class PresetSelector(App):
         Binding("q", "quit", "Quit", show=True, priority=True),
     ]
 
-    def __init__(self, config: Optional[Config] = None):
+    def __init__(self, config: Config | None = None):
         super().__init__()
         self.config = config or load_config()
-        self.selected_preset: Optional[str] = None
+        self.selected_preset: str | None = None
         self.preset_cards: dict[str, PresetCard] = {}
         self.preset_order = ["minimal", "developer", "full"]
         # Disable scrolling
@@ -212,10 +211,7 @@ class PresetSelector(App):
         yield Header()
 
         yield Label("Select a Preset", id="title")
-        yield Label(
-            "Choose a preset to get started quickly, or skip to select individual packages",
-            id="subtitle"
-        )
+        yield Label("Choose a preset to get started quickly, or skip to select individual packages", id="subtitle")
 
         with Container(id="preset-container"):
             with Horizontal():
@@ -316,7 +312,7 @@ class PresetSelector(App):
             self.action_skip()
 
 
-async def select_preset(config: Optional[Config] = None) -> Optional[dict]:
+async def select_preset(config: Config | None = None) -> dict | None:
     """
     Run the interactive preset selector TUI.
 

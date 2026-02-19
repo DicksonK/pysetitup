@@ -2,7 +2,6 @@
 
 import importlib.resources
 from pathlib import Path
-from typing import Optional
 
 import yaml
 
@@ -31,12 +30,12 @@ def load_embedded_presets() -> dict[str, Preset]:
         return validated.presets
 
     except FileNotFoundError as e:
-        raise ConfigurationError(f"presets.yaml not found in package: {e}")
+        raise ConfigurationError(f"presets.yaml not found in package: {e}") from e
     except Exception as e:
         # Re-raise ConfigurationError as-is, wrap others
         if isinstance(e, ConfigurationError):
             raise
-        raise ConfigurationError(f"Failed to load presets: {e}")
+        raise ConfigurationError(f"Failed to load presets: {e}") from e
 
 
 def load_embedded_packages() -> list[Package]:
@@ -59,9 +58,7 @@ def load_embedded_packages() -> list[Package]:
         data = yaml.safe_load(content)
 
         if not data or "categories" not in data:
-            raise ConfigurationError(
-                "Invalid packages.yaml format: missing 'categories' key"
-            )
+            raise ConfigurationError("Invalid packages.yaml format: missing 'categories' key")
 
         # Parse into Pydantic models - flatten categories structure
         packages = []
@@ -94,13 +91,13 @@ def load_embedded_packages() -> list[Package]:
 
         return packages
     except FileNotFoundError as e:
-        raise ConfigurationError(f"packages.yaml not found in package: {e}")
+        raise ConfigurationError(f"packages.yaml not found in package: {e}") from e
     except yaml.YAMLError as e:
-        raise ConfigurationError(f"Failed to parse packages.yaml: {e}")
+        raise ConfigurationError(f"Failed to parse packages.yaml: {e}") from e
     except KeyError as e:
-        raise ConfigurationError(f"Invalid package structure: missing {e}")
+        raise ConfigurationError(f"Invalid package structure: missing {e}") from e
     except Exception as e:
-        raise ConfigurationError(f"Failed to load packages: {e}")
+        raise ConfigurationError(f"Failed to load packages: {e}") from e
 
 
 def load_external_presets(file_path: Path) -> dict[str, Preset]:
@@ -129,10 +126,10 @@ def load_external_presets(file_path: Path) -> dict[str, Preset]:
     except Exception as e:
         if isinstance(e, ConfigurationError):
             raise
-        raise ConfigurationError(f"Failed to load external presets from {file_path}: {e}")
+        raise ConfigurationError(f"Failed to load external presets from {file_path}: {e}") from e
 
 
-def load_config(external_presets_file: Optional[Path] = None) -> Config:
+def load_config(external_presets_file: Path | None = None) -> Config:
     """
     Load the complete configuration (presets + packages).
 

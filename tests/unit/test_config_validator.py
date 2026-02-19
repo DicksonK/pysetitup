@@ -158,7 +158,7 @@ class TestValidatePreset:
             "casks": ["warp"],
             "npm": [],
             "taps": [],
-            "vscode": []
+            "vscode": [],
         }
 
         result = validate_preset(preset_data)
@@ -169,10 +169,7 @@ class TestValidatePreset:
 
     def test_invalid_preset_missing_name(self) -> None:
         """Test validation fails when name is missing."""
-        preset_data = {
-            "description": "Missing name",
-            "packages": []
-        }
+        preset_data = {"description": "Missing name", "packages": []}
 
         with pytest.raises(ConfigurationError) as exc_info:
             validate_preset(preset_data)
@@ -188,7 +185,7 @@ class TestValidatePreset:
             "casks": ["visual-studio-code"],
             "npm": ["typescript"],
             "taps": ["homebrew/cask-fonts"],
-            "vscode": ["ms-python.python"]
+            "vscode": ["ms-python.python"],
         }
 
         result = validate_preset(preset_data)

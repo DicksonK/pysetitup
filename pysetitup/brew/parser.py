@@ -1,7 +1,6 @@
 """Homebrew output parser."""
 
 import re
-from typing import Optional
 
 
 class BrewParser:
@@ -115,7 +114,7 @@ class BrewParser:
         return False
 
     @staticmethod
-    def extract_version(output: str) -> Optional[str]:
+    def extract_version(output: str) -> str | None:
         """
         Extract version number from brew output.
 

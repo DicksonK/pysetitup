@@ -1,6 +1,5 @@
 """Unit tests for pysetitup.ui.selector module."""
 
-import pytest
 
 from pysetitup.config.loader import load_config
 from pysetitup.ui.selector import PackageSelector
@@ -50,15 +49,11 @@ class TestPackageSelector:
 
         # Calculate approximate footer width needed
         # Format: "key description  key description  ..."
-        footer_text = "  ".join(
-            f"{b.key} {b.description}" for b in visible_bindings
-        )
+        footer_text = "  ".join(f"{b.key} {b.description}" for b in visible_bindings)
 
         # Standard terminal is 80 characters wide
         # Footer should fit comfortably (with some margin for styling)
-        assert len(footer_text) < 100, (
-            f"Footer text too long ({len(footer_text)} chars): {footer_text}"
-        )
+        assert len(footer_text) < 100, f"Footer text too long ({len(footer_text)} chars): {footer_text}"
 
     def test_bindings_have_compact_descriptions(self) -> None:
         """Test that binding descriptions are concise."""
@@ -88,9 +83,7 @@ class TestPackageSelector:
         assert right_index < 5, f"Right arrow at position {right_index}, should be earlier"
 
         # Should be adjacent to each other
-        assert abs(left_index - right_index) == 1, (
-            "Left and right arrows should be next to each other"
-        )
+        assert abs(left_index - right_index) == 1, "Left and right arrows should be next to each other"
 
     def test_selector_initializes_with_config(self) -> None:
         """Test PackageSelector can initialize with config."""

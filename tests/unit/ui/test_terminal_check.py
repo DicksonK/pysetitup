@@ -1,7 +1,5 @@
 """Tests for terminal size validation utilities."""
 
-import shutil
-import sys
 from unittest.mock import MagicMock, patch
 
 import pytest

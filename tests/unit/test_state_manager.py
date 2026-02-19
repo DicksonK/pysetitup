@@ -2,7 +2,6 @@
 
 import json
 from pathlib import Path
-from typing import Any
 
 import pytest
 
@@ -102,7 +101,7 @@ class TestStateSaving:
         manager.save_state(state)
 
         # Read and validate JSON
-        with open(temp_state_file, "r") as f:
+        with open(temp_state_file) as f:
             data = json.load(f)
 
         assert data["installed_formulae"] == ["git", "fzf"]
@@ -253,9 +252,7 @@ class TestStepTracking:
         state = manager.get_state()
         assert "git_config" in state.completed_steps
 
-    def test_mark_step_complete_prevents_duplicates(
-        self, temp_state_file: Path
-    ) -> None:
+    def test_mark_step_complete_prevents_duplicates(self, temp_state_file: Path) -> None:
         """Test mark_step_complete doesn't add duplicates."""
         manager = StateManager(state_file=str(temp_state_file))
 

@@ -3,7 +3,6 @@
 import os
 import platform
 import sys
-from typing import Optional
 
 
 def is_macos() -> bool:
@@ -11,7 +10,7 @@ def is_macos() -> bool:
     return platform.system() == "Darwin"
 
 
-def get_macos_version() -> Optional[str]:
+def get_macos_version() -> str | None:
     """
     Get the macOS version string.
 
@@ -51,7 +50,7 @@ def is_ci() -> bool:
     return any(os.getenv(key) for key in ci_indicators)
 
 
-def get_shell() -> Optional[str]:
+def get_shell() -> str | None:
     """
     Get the current shell name.
 

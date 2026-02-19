@@ -1,12 +1,10 @@
 """Async parallel Homebrew package installer."""
 
 import asyncio
-from typing import Awaitable, Callable, Optional
+from collections.abc import Awaitable, Callable
 
 from pysetitup.brew.client import BrewClient
-from pysetitup.brew.parser import BrewParser
 from pysetitup.installer.models import BrewInstallResult as InstallResult
-from pysetitup.utils.errors import InstallationError
 
 
 class BrewInstaller:
@@ -14,7 +12,7 @@ class BrewInstaller:
 
     def __init__(
         self,
-        client: Optional[BrewClient] = None,
+        client: BrewClient | None = None,
         max_concurrent: int = 5,
         max_retries: int = 3,
     ):
@@ -44,7 +42,7 @@ class BrewInstaller:
         package: str,
         install_func: Callable[[str], Awaitable[tuple[bool, str]]],
         package_type: str,
-        on_progress: Optional[Callable[[str, str], None]] = None,
+        on_progress: Callable[[str, str], None] | None = None,
         dry_run: bool = False,
     ) -> InstallResult:
         """
@@ -114,9 +112,7 @@ class BrewInstaller:
                     if attempt < self.max_retries:
                         backoff = 2**attempt  # Exponential backoff
                         if on_progress:
-                            on_progress(
-                                package, f"⚠ Failed, retrying in {backoff}s..."
-                            )
+                            on_progress(package, f"⚠ Failed, retrying in {backoff}s...")
                         await asyncio.sleep(backoff)
                     else:
                         # Final attempt failed
@@ -158,7 +154,7 @@ class BrewInstaller:
     async def install_formula(
         self,
         package: str,
-        on_progress: Optional[Callable[[str, str], None]] = None,
+        on_progress: Callable[[str, str], None] | None = None,
         dry_run: bool = False,
     ) -> InstallResult:
         """
@@ -183,7 +179,7 @@ class BrewInstaller:
     async def install_cask(
         self,
         package: str,
-        on_progress: Optional[Callable[[str, str], None]] = None,
+        on_progress: Callable[[str, str], None] | None = None,
         dry_run: bool = False,
     ) -> InstallResult:
         """
@@ -209,7 +205,7 @@ class BrewInstaller:
         self,
         formulae: list[str],
         casks: list[str],
-        on_progress: Optional[Callable[[str, str], None]] = None,
+        on_progress: Callable[[str, str], None] | None = None,
         dry_run: bool = False,
     ) -> list[InstallResult]:
         """
@@ -225,9 +221,7 @@ class BrewInstaller:
             List of InstallResult for all packages
         """
         # Create tasks for all packages
-        formula_tasks = [
-            self.install_formula(pkg, on_progress, dry_run) for pkg in formulae
-        ]
+        formula_tasks = [self.install_formula(pkg, on_progress, dry_run) for pkg in formulae]
         cask_tasks = [self.install_cask(pkg, on_progress, dry_run) for pkg in casks]
 
         # Run all tasks in parallel (limited by semaphore)
@@ -256,7 +250,7 @@ class BrewInstaller:
     async def tap_repositories(
         self,
         taps: list[str],
-        on_progress: Optional[Callable[[str, str], None]] = None,
+        on_progress: Callable[[str, str], None] | None = None,
         dry_run: bool = False,
     ) -> list[InstallResult]:
         """

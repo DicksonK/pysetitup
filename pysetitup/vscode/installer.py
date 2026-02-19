@@ -1,7 +1,7 @@
 """VS Code extension installer with parallel installation support."""
 
 import asyncio
-from typing import Callable, Optional
+from collections.abc import Callable
 
 from pysetitup.installer.models import VSCodeInstallResult as InstallResult
 from pysetitup.vscode.client import VSCodeClient
@@ -12,7 +12,7 @@ class VSCodeInstaller:
 
     def __init__(
         self,
-        client: Optional[VSCodeClient] = None,
+        client: VSCodeClient | None = None,
         max_concurrent: int = 3,
     ) -> None:
         """
@@ -34,7 +34,7 @@ class VSCodeInstaller:
     async def install_extensions(
         self,
         extension_ids: list[str],
-        on_progress: Optional[Callable[[str], None]] = None,
+        on_progress: Callable[[str], None] | None = None,
         dry_run: bool = False,
     ) -> list[InstallResult]:
         """
@@ -138,7 +138,7 @@ class VSCodeInstaller:
     async def uninstall_extensions(
         self,
         extension_ids: list[str],
-        on_progress: Optional[Callable[[str], None]] = None,
+        on_progress: Callable[[str], None] | None = None,
     ) -> list[InstallResult]:
         """
         Uninstall VS Code extensions.

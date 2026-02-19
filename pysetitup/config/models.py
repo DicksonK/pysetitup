@@ -1,6 +1,6 @@
 """Configuration data models for PySetItUp."""
 
-from typing import Literal, Optional
+from typing import Literal
 
 from pydantic import BaseModel, Field
 
@@ -11,8 +11,8 @@ class Package(BaseModel):
     name: str = Field(..., description="Package name")
     category: str = Field(..., description="Category (e.g., 'CLI Tools', 'Development')")
     type: Literal["formula", "cask", "npm", "vscode"] = Field(..., description="Package type")
-    description: Optional[str] = Field(None, description="Package description")
-    tap: Optional[str] = Field(None, description="Homebrew tap if needed")
+    description: str | None = Field(None, description="Package description")
+    tap: str | None = Field(None, description="Homebrew tap if needed")
 
     model_config = {
         "json_schema_extra": {
@@ -56,23 +56,17 @@ class DotfilesConfig(BaseModel):
     """Dotfiles repository configuration."""
 
     repo: str = Field(..., description="Git repository URL")
-    branch: Optional[str] = Field(None, description="Branch to checkout")
-    stow_dirs: list[str] = Field(
-        default_factory=list, description="Directories to stow (link)"
-    )
+    branch: str | None = Field(None, description="Branch to checkout")
+    stow_dirs: list[str] = Field(default_factory=list, description="Directories to stow (link)")
 
 
 class Config(BaseModel):
     """Main configuration containing all presets and packages."""
 
-    presets: dict[str, Preset] = Field(
-        default_factory=dict, description="Available presets"
-    )
-    packages: list[Package] = Field(
-        default_factory=list, description="All available packages"
-    )
+    presets: dict[str, Preset] = Field(default_factory=dict, description="Available presets")
+    packages: list[Package] = Field(default_factory=list, description="All available packages")
 
-    def get_preset(self, name: str) -> Optional[Preset]:
+    def get_preset(self, name: str) -> Preset | None:
         """
         Get a preset by name.
 
@@ -84,7 +78,7 @@ class Config(BaseModel):
         """
         return self.presets.get(name)
 
-    def get_package(self, name: str) -> Optional[Package]:
+    def get_package(self, name: str) -> Package | None:
         """
         Get a package by name.
 

@@ -38,9 +38,7 @@ class SystemChecks:
         required : bool, default=False
             Whether this check is required to proceed
         """
-        self.checks.append(
-            {"name": name, "status": status, "message": message, "required": required}
-        )
+        self.checks.append({"name": name, "status": status, "message": message, "required": required})
 
     def display(self, title: str = "System Checks") -> bool:
         """
@@ -318,9 +316,7 @@ def check_nerd_font() -> tuple[str, str]:
 
     try:
         # List all installed fonts and check for Nerd Font patterns
-        result = subprocess.run(
-            ["brew", "list", "--cask"], capture_output=True, text=True, timeout=10, check=False
-        )
+        result = subprocess.run(["brew", "list", "--cask"], capture_output=True, text=True, timeout=10, check=False)
 
         if result.returncode != 0:
             return ("skip", "Could not check installed fonts")
@@ -339,9 +335,7 @@ def check_nerd_font() -> tuple[str, str]:
         for font in nerd_fonts:
             if font in installed_casks:
                 # Extract font name
-                font_name = (
-                    font.replace("font-", "").replace("-nerd-font", "").title().replace("-", " ")
-                )
+                font_name = font.replace("font-", "").replace("-nerd-font", "").title().replace("-", " ")
                 return ("pass", f"Nerd Font installed: {font_name}")
 
         return ("warn", "No Nerd Font found - needed for Powerlevel10k icons")
@@ -349,9 +343,7 @@ def check_nerd_font() -> tuple[str, str]:
         return ("skip", f"Could not check Nerd Fonts: {str(e)}")
 
 
-def check_terminal_size(
-    min_width: int = MIN_TERMINAL_WIDTH, min_height: int = MIN_TERMINAL_HEIGHT
-) -> tuple[str, str]:
+def check_terminal_size(min_width: int = MIN_TERMINAL_WIDTH, min_height: int = MIN_TERMINAL_HEIGHT) -> tuple[str, str]:
     """
     Check if terminal is large enough.
 
@@ -511,9 +503,7 @@ def install_omz(console: Console | None = None) -> bool:
             console.print("\n[green]✓[/green] Oh My Zsh installed successfully")
             return True
         else:
-            console.print(
-                f"\n[red]✗[/red] Oh My Zsh installation failed (exit code: {result.returncode})"
-            )
+            console.print(f"\n[red]✗[/red] Oh My Zsh installation failed (exit code: {result.returncode})")
             return False
     except Exception as e:
         console.print(f"[red]✗[/red] Failed to install Oh My Zsh: {e}")
@@ -554,9 +544,7 @@ def install_powerlevel10k(console: Console | None = None) -> bool:
 
         if p10k_path.exists():
             console.print("[dim]Powerlevel10k directory already exists, updating...[/dim]")
-            result = subprocess.run(
-                ["git", "-C", str(p10k_path), "pull"], capture_output=True, text=True, check=False
-            )
+            result = subprocess.run(["git", "-C", str(p10k_path), "pull"], capture_output=True, text=True, check=False)
         else:
             result = subprocess.run(
                 [
@@ -573,9 +561,7 @@ def install_powerlevel10k(console: Console | None = None) -> bool:
 
         if result.returncode == 0:
             console.print("[green]✓[/green] Powerlevel10k installed successfully")
-            console.print(
-                '\n[dim]To activate, set ZSH_THEME="powerlevel10k/powerlevel10k" in ~/.zshrc[/dim]'
-            )
+            console.print('\n[dim]To activate, set ZSH_THEME="powerlevel10k/powerlevel10k" in ~/.zshrc[/dim]')
             return True
         else:
             console.print(f"[red]✗[/red] Powerlevel10k installation failed: {result.stderr}")
@@ -692,16 +678,12 @@ def setup_github_ssh(console: Console | None = None) -> bool:
         console.print("[dim]You'll be prompted to authenticate via browser or token[/dim]\n")
 
         # Check if already authenticated
-        auth_check = subprocess.run(
-            ["gh", "auth", "status"], capture_output=True, text=True, check=False
-        )
+        auth_check = subprocess.run(["gh", "auth", "status"], capture_output=True, text=True, check=False)
 
         if auth_check.returncode != 0:
             # Need to authenticate
             console.print("[yellow]⚠[/yellow] Not authenticated with GitHub")
-            auth_result = subprocess.run(
-                ["gh", "auth", "login", "-h", "github.com", "-p", "https", "-w"], check=False
-            )
+            auth_result = subprocess.run(["gh", "auth", "login", "-h", "github.com", "-p", "https", "-w"], check=False)
 
             if auth_result.returncode != 0:
                 console.print("[red]✗[/red] GitHub authentication failed")
@@ -784,9 +766,7 @@ def setup_github_ssh(console: Console | None = None) -> bool:
             return True
         else:
             # If upload failed, show manual instructions
-            console.print(
-                f"[yellow]⚠[/yellow] Automatic upload failed: {upload_result.stderr.strip()}"
-            )
+            console.print(f"[yellow]⚠[/yellow] Automatic upload failed: {upload_result.stderr.strip()}")
             console.print("\n[yellow]Manual setup required:[/yellow]")
 
             with open(public_key_file) as f:

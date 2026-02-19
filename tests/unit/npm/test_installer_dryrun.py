@@ -13,10 +13,7 @@ class TestNpmInstallerDryRun:
         """Test install_packages in dry-run mode."""
         installer = NpmInstaller()
 
-        results = await installer.install_packages(
-            packages=["typescript", "eslint", "prettier"],
-            dry_run=True
-        )
+        results = await installer.install_packages(packages=["typescript", "eslint", "prettier"], dry_run=True)
 
         assert len(results) == 3
         assert all(r.success for r in results)
@@ -45,11 +42,7 @@ class TestNpmInstallerDryRun:
         def on_progress(package: str, status: str) -> None:
             progress_calls.append((package, status))
 
-        await installer.install_packages(
-            packages=["typescript", "eslint"],
-            on_progress=on_progress,
-            dry_run=True
-        )
+        await installer.install_packages(packages=["typescript", "eslint"], on_progress=on_progress, dry_run=True)
 
         assert len(progress_calls) == 1
         assert "[DRY RUN]" in progress_calls[0][1]

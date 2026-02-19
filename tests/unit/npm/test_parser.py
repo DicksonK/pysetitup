@@ -1,6 +1,5 @@
 """Unit tests for pysetitup.npm.parser module."""
 
-import pytest
 
 from pysetitup.npm.parser import NpmParser
 
@@ -10,9 +9,7 @@ class TestNpmParser:
 
     def test_parse_list_json(self) -> None:
         """Test parse_list_json extracts package names."""
-        json_data = {
-            "dependencies": {"typescript": {}, "eslint": {}, "prettier": {}}
-        }
+        json_data = {"dependencies": {"typescript": {}, "eslint": {}, "prettier": {}}}
         packages = NpmParser.parse_list_json(json_data)
 
         assert set(packages) == {"typescript", "eslint", "prettier"}

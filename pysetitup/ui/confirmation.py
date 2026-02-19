@@ -1,7 +1,6 @@
 """Confirmation screen for package installation."""
 
-import asyncio
-from typing import Awaitable, Callable, Optional
+from collections.abc import Awaitable, Callable
 
 from textual.app import App, ComposeResult
 from textual.binding import Binding
@@ -87,8 +86,8 @@ class ConfirmationScreen(App):
     def __init__(
         self,
         packages: list[str],
-        installed_packages: dict[str, Optional[str]] | None = None,
-        get_installed_packages_func: Callable[[], Awaitable[dict[str, Optional[str]]]] | None = None,
+        installed_packages: dict[str, str | None] | None = None,
+        get_installed_packages_func: Callable[[], Awaitable[dict[str, str | None]]] | None = None,
     ):
         """
         Initialize confirmation screen.
@@ -116,9 +115,7 @@ class ConfirmationScreen(App):
         if self.checking_packages:
             summary = f"Total: {len(self.packages)} packages  |  Checking installed packages..."
         else:
-            already_installed = [
-                p for p in self.packages if p in self.installed_packages
-            ]
+            already_installed = [p for p in self.packages if p in self.installed_packages]
             to_install = [p for p in self.packages if p not in self.installed_packages]
             summary = (
                 f"Total: {len(self.packages)} packages  |  "
@@ -134,9 +131,7 @@ class ConfirmationScreen(App):
                     yield Label("\n[dim]🔍 Checking which packages are already installed...[/dim]")
                     yield Label("[dim]This may take a moment...[/dim]")
                 else:
-                    already_installed = [
-                        p for p in self.packages if p in self.installed_packages
-                    ]
+                    already_installed = [p for p in self.packages if p in self.installed_packages]
                     to_install = [p for p in self.packages if p not in self.installed_packages]
 
                     if to_install:
@@ -154,9 +149,7 @@ class ConfirmationScreen(App):
                                 classes="package-item already-installed",
                             )
 
-        yield Label(
-            "\nProceed with installation?", id="instructions"
-        )
+        yield Label("\nProceed with installation?", id="instructions")
 
         yield Footer()
 
@@ -179,9 +172,7 @@ class ConfirmationScreen(App):
     def _update_display(self) -> None:
         """Update the summary and package list after checking installed packages."""
         # Update summary
-        already_installed = [
-            p for p in self.packages if p in self.installed_packages
-        ]
+        already_installed = [p for p in self.packages if p in self.installed_packages]
         to_install = [p for p in self.packages if p not in self.installed_packages]
 
         summary = (
@@ -206,10 +197,12 @@ class ConfirmationScreen(App):
             for pkg in sorted(already_installed):
                 version = self.installed_packages.get(pkg)
                 version_str = f" ({version})" if version else ""
-                scroll.mount(Label(
-                    f"  ✓ {pkg}{version_str}",
-                    classes="package-item already-installed",
-                ))
+                scroll.mount(
+                    Label(
+                        f"  ✓ {pkg}{version_str}",
+                        classes="package-item already-installed",
+                    )
+                )
 
     def action_confirm(self) -> None:
         """User confirmed - proceed with installation."""
@@ -224,8 +217,8 @@ class ConfirmationScreen(App):
 
 async def show_confirmation(
     packages: list[str],
-    installed_packages: dict[str, Optional[str]] | None = None,
-    get_installed_packages_func: Callable[[], Awaitable[dict[str, Optional[str]]]] | None = None,
+    installed_packages: dict[str, str | None] | None = None,
+    get_installed_packages_func: Callable[[], Awaitable[dict[str, str | None]]] | None = None,
 ) -> bool:
     """
     Show confirmation screen and get user approval.

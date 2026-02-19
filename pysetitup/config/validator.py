@@ -1,7 +1,6 @@
 """YAML configuration validation using Pydantic."""
 
 from pathlib import Path
-from typing import Optional
 
 import yaml
 from pydantic import BaseModel, Field, ValidationError
@@ -13,9 +12,7 @@ from pysetitup.utils.errors import ConfigurationError
 class PresetsFile(BaseModel):
     """Model for validating presets YAML file structure."""
 
-    presets: dict[str, Preset] = Field(
-        ..., description="Dictionary of preset configurations"
-    )
+    presets: dict[str, Preset] = Field(..., description="Dictionary of preset configurations")
 
     model_config = {
         "json_schema_extra": {
@@ -52,7 +49,7 @@ def validate_presets_yaml(yaml_content: str) -> PresetsFile:
     try:
         data = yaml.safe_load(yaml_content)
     except yaml.YAMLError as e:
-        raise ConfigurationError(f"Invalid YAML syntax: {e}")
+        raise ConfigurationError(f"Invalid YAML syntax: {e}") from e
 
     if not data:
         raise ConfigurationError("Empty YAML file")
@@ -67,7 +64,7 @@ def validate_presets_yaml(yaml_content: str) -> PresetsFile:
             errors.append(f"  - {field}: {message}")
 
         error_message = "YAML validation errors:\n" + "\n".join(errors)
-        raise ConfigurationError(error_message)
+        raise ConfigurationError(error_message) from e
 
 
 def validate_preset(preset_data: dict) -> Preset:
@@ -93,7 +90,7 @@ def validate_preset(preset_data: dict) -> Preset:
             errors.append(f"  - {field}: {message}")
 
         error_message = "Preset validation errors:\n" + "\n".join(errors)
-        raise ConfigurationError(error_message)
+        raise ConfigurationError(error_message) from e
 
 
 def validate_presets_file(file_path: Path) -> PresetsFile:
@@ -118,6 +115,6 @@ def validate_presets_file(file_path: Path) -> PresetsFile:
     try:
         content = file_path.read_text()
     except Exception as e:
-        raise ConfigurationError(f"Failed to read presets file: {e}")
+        raise ConfigurationError(f"Failed to read presets file: {e}") from e
 
     return validate_presets_yaml(content)

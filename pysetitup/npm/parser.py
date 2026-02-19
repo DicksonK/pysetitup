@@ -1,8 +1,6 @@
 """npm output parser."""
 
-import json
 import re
-from typing import Optional
 
 
 class NpmParser:
@@ -122,7 +120,7 @@ class NpmParser:
         return unique_packages
 
     @staticmethod
-    def extract_version(output: str, package: str) -> Optional[str]:
+    def extract_version(output: str, package: str) -> str | None:
         """
         Extract version number for a specific package from npm output.
 

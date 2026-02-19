@@ -1,7 +1,6 @@
 """Unit tests for pysetitup.brew.client module."""
 
-import asyncio
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, patch
 
 import pytest
 
@@ -76,9 +75,7 @@ class TestBrewClient:
         mock_proc.returncode = 1
 
         with patch("asyncio.create_subprocess_exec", return_value=mock_proc):
-            returncode, stdout, stderr = await client._run_command(
-                ["bad-command"], check=False
-            )
+            returncode, stdout, stderr = await client._run_command(["bad-command"], check=False)
 
             assert returncode == 1
             assert stderr == "error"

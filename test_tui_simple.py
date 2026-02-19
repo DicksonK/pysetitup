@@ -32,10 +32,10 @@ async def main():
             initial_selection = set()
             print("⚠️  No preset found, starting with empty selection")
 
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("Starting TUI...")
         print("Use: Space=toggle, Tab=category, /=search, Enter=confirm")
-        print("="*60 + "\n")
+        print("=" * 60 + "\n")
 
         # Create and run the TUI app
         app = PackageSelector(config=config, preset_packages=initial_selection)
@@ -54,6 +54,7 @@ async def main():
     except Exception as e:
         print(f"\n❌ Error: {e}")
         import traceback
+
         traceback.print_exc()
         return 1
 

@@ -2,10 +2,8 @@
 
 import shutil
 import sys
-from typing import Optional
 
 from rich.console import Console
-
 
 MIN_TERMINAL_WIDTH = 140
 MIN_TERMINAL_HEIGHT = 30
@@ -20,14 +18,13 @@ def check_terminal_size() -> bool:
     """
     try:
         terminal_size = shutil.get_terminal_size()
-        return (terminal_size.columns >= MIN_TERMINAL_WIDTH and
-                terminal_size.lines >= MIN_TERMINAL_HEIGHT)
+        return terminal_size.columns >= MIN_TERMINAL_WIDTH and terminal_size.lines >= MIN_TERMINAL_HEIGHT
     except Exception:
         # If we can't determine size, proceed anyway
         return True
 
 
-def show_terminal_size_error(console: Optional[Console] = None, use_rich: bool = True) -> None:
+def show_terminal_size_error(console: Console | None = None, use_rich: bool = True) -> None:
     """
     Display terminal size error message and exit.
 
@@ -63,7 +60,7 @@ def show_terminal_size_error(console: Optional[Console] = None, use_rich: bool =
         console.print(f"\n   Please resize your terminal to at least {MIN_TERMINAL_WIDTH}×{MIN_TERMINAL_HEIGHT}.")
     else:
         # Plain text output
-        print(f"❌ Error: Terminal size is too small for the TUI.")
+        print("❌ Error: Terminal size is too small for the TUI.")
         print(f"   Minimum required: {MIN_TERMINAL_WIDTH} columns × {MIN_TERMINAL_HEIGHT} lines")
 
         if current_width and current_height:
@@ -79,7 +76,7 @@ def show_terminal_size_error(console: Optional[Console] = None, use_rich: bool =
     sys.exit(1)
 
 
-def check_and_enforce_terminal_size(console: Optional[Console] = None, use_rich: bool = True) -> None:
+def check_and_enforce_terminal_size(console: Console | None = None, use_rich: bool = True) -> None:
     """
     Check terminal size and exit with error message if too small.
 

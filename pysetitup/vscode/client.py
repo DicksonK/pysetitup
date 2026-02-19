@@ -1,8 +1,6 @@
 """VS Code extension client for managing extensions."""
 
 import asyncio
-import json
-from typing import Optional
 
 from pysetitup.utils.errors import CommandError
 
@@ -19,9 +17,7 @@ class VSCodeClient:
         """
         self.code_command = code_command
 
-    async def _run_command(
-        self, args: list[str], check: bool = True
-    ) -> tuple[int, str, str]:
+    async def _run_command(self, args: list[str], check: bool = True) -> tuple[int, str, str]:
         """
         Run a VS Code CLI command.
 
@@ -51,9 +47,7 @@ class VSCodeClient:
             exit_code = proc.returncode or 0
 
             if check and exit_code != 0:
-                raise CommandError(
-                    f"VS Code command failed: {' '.join(cmd)}\n{stderr}"
-                )
+                raise CommandError(f"VS Code command failed: {' '.join(cmd)}\n{stderr}")
 
             return exit_code, stdout, stderr
         except FileNotFoundError:
@@ -61,7 +55,7 @@ class VSCodeClient:
                 f"VS Code CLI not found. Make sure '{self.code_command}' is in your PATH. "
                 "You may need to install it via VS Code > Command Palette > "
                 "'Shell Command: Install 'code' command in PATH'"
-            )
+            ) from None
 
     async def list_extensions(self) -> list[str]:
         """
@@ -89,9 +83,7 @@ class VSCodeClient:
         Raises:
             CommandError: If listing fails
         """
-        _, stdout, _ = await self._run_command(
-            ["--list-extensions", "--show-versions"], check=True
-        )
+        _, stdout, _ = await self._run_command(["--list-extensions", "--show-versions"], check=True)
 
         extensions = {}
         for line in stdout.strip().split("\n"):
@@ -104,9 +96,7 @@ class VSCodeClient:
 
         return extensions
 
-    async def install_extension(
-        self, extension_id: str, force: bool = False
-    ) -> tuple[bool, str]:
+    async def install_extension(self, extension_id: str, force: bool = False) -> tuple[bool, str]:
         """
         Install a VS Code extension.
 
@@ -145,9 +135,7 @@ class VSCodeClient:
             Tuple of (success: bool, message: str)
         """
         try:
-            exit_code, stdout, stderr = await self._run_command(
-                ["--uninstall-extension", extension_id], check=False
-            )
+            exit_code, stdout, stderr = await self._run_command(["--uninstall-extension", extension_id], check=False)
 
             if exit_code == 0:
                 return True, f"Successfully uninstalled {extension_id}"
@@ -169,7 +157,7 @@ class VSCodeClient:
         except CommandError:
             return False
 
-    async def get_version(self) -> Optional[str]:
+    async def get_version(self) -> str | None:
         """
         Get VS Code version.
 

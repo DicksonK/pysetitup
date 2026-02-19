@@ -2,7 +2,6 @@
 
 from io import StringIO
 
-import pytest
 from rich.console import Console
 
 from pysetitup.ui.checks import (
@@ -144,11 +143,7 @@ class TestRunSystemChecks:
         output = StringIO()
         console = Console(file=output, force_terminal=True, width=100)
 
-        result = run_system_checks(
-            vscode_extensions=[],
-            npm_packages=[],
-            console=console
-        )
+        result = run_system_checks(vscode_extensions=[], npm_packages=[], console=console)
 
         assert isinstance(result, bool)
 
@@ -157,11 +152,7 @@ class TestRunSystemChecks:
         output = StringIO()
         console = Console(file=output, force_terminal=True, width=100)
 
-        result = run_system_checks(
-            vscode_extensions=["ms-python.python"],
-            npm_packages=[],
-            console=console
-        )
+        result = run_system_checks(vscode_extensions=["ms-python.python"], npm_packages=[], console=console)
 
         assert isinstance(result, bool)
 
@@ -170,10 +161,6 @@ class TestRunSystemChecks:
         output = StringIO()
         console = Console(file=output, force_terminal=True, width=100)
 
-        result = run_system_checks(
-            vscode_extensions=[],
-            npm_packages=["typescript"],
-            console=console
-        )
+        result = run_system_checks(vscode_extensions=[], npm_packages=["typescript"], console=console)
 
         assert isinstance(result, bool)

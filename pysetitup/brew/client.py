@@ -2,7 +2,6 @@
 
 import asyncio
 import shutil
-from typing import Optional
 
 from pysetitup.utils.errors import DependencyError, InstallationError
 
@@ -10,7 +9,7 @@ from pysetitup.utils.errors import DependencyError, InstallationError
 class BrewClient:
     """Client for executing Homebrew commands."""
 
-    def __init__(self, brew_path: Optional[str] = None):
+    def __init__(self, brew_path: str | None = None):
         """
         Initialize BrewClient.
 
@@ -22,11 +21,9 @@ class BrewClient:
         """
         self.brew_path = brew_path or self._find_brew()
         if not self.brew_path:
-            raise DependencyError(
-                "Homebrew is not installed. Install from https://brew.sh"
-            )
+            raise DependencyError("Homebrew is not installed. Install from https://brew.sh")
 
-    def _find_brew(self) -> Optional[str]:
+    def _find_brew(self) -> str | None:
         """
         Find the brew executable in PATH.
 
@@ -39,7 +36,7 @@ class BrewClient:
         self,
         args: list[str],
         check: bool = True,
-        timeout: Optional[float] = None,
+        timeout: float | None = None,
     ) -> tuple[int, str, str]:
         """
         Run a brew command asynchronously.
@@ -65,9 +62,7 @@ class BrewClient:
                 stderr=asyncio.subprocess.PIPE,
             )
 
-            stdout_bytes, stderr_bytes = await asyncio.wait_for(
-                proc.communicate(), timeout=timeout
-            )
+            stdout_bytes, stderr_bytes = await asyncio.wait_for(proc.communicate(), timeout=timeout)
 
             stdout = stdout_bytes.decode("utf-8", errors="replace")
             stderr = stderr_bytes.decode("utf-8", errors="replace")
@@ -78,9 +73,7 @@ class BrewClient:
                 pkg_name = args[1] if len(args) > 1 else "unknown"
                 raise InstallationError(
                     package=pkg_name,
-                    message=f"Brew command failed: {' '.join(args)}\n"
-                    f"Exit code: {returncode}\n"
-                    f"Stderr: {stderr}",
+                    message=f"Brew command failed: {' '.join(args)}\n" f"Exit code: {returncode}\n" f"Stderr: {stderr}",
                 )
 
             return returncode, stdout, stderr
@@ -92,9 +85,7 @@ class BrewClient:
                 await proc.wait()
             raise
 
-    async def install_formula(
-        self, name: str, timeout: Optional[float] = 600.0
-    ) -> tuple[bool, str]:
+    async def install_formula(self, name: str, timeout: float | None = 600.0) -> tuple[bool, str]:
         """
         Install a Homebrew formula.
 
@@ -106,18 +97,14 @@ class BrewClient:
             Tuple of (success, message)
         """
         try:
-            _, stdout, stderr = await self._run_command(
-                ["install", name], check=True, timeout=timeout
-            )
+            _, stdout, stderr = await self._run_command(["install", name], check=True, timeout=timeout)
             return True, f"Installed {name}"
         except InstallationError as e:
             return False, str(e)
         except asyncio.TimeoutError:
             return False, f"Installation of {name} timed out after {timeout}s"
 
-    async def install_cask(
-        self, name: str, timeout: Optional[float] = 600.0
-    ) -> tuple[bool, str]:
+    async def install_cask(self, name: str, timeout: float | None = 600.0) -> tuple[bool, str]:
         """
         Install a Homebrew cask.
 
@@ -129,9 +116,7 @@ class BrewClient:
             Tuple of (success, message)
         """
         try:
-            _, stdout, stderr = await self._run_command(
-                ["install", "--cask", name], check=True, timeout=timeout
-            )
+            _, stdout, stderr = await self._run_command(["install", "--cask", name], check=True, timeout=timeout)
             return True, f"Installed {name}"
         except InstallationError as e:
             return False, str(e)
@@ -175,9 +160,7 @@ class BrewClient:
             Dictionary mapping package name to version
         """
         try:
-            _, stdout, _ = await self._run_command(
-                ["list", "--formula", "--versions"], check=True
-            )
+            _, stdout, _ = await self._run_command(["list", "--formula", "--versions"], check=True)
             versions = {}
             for line in stdout.strip().split("\n"):
                 if line.strip():
@@ -211,9 +194,7 @@ class BrewClient:
             Dictionary mapping package name to version
         """
         try:
-            _, stdout, _ = await self._run_command(
-                ["list", "--cask", "--versions"], check=True
-            )
+            _, stdout, _ = await self._run_command(["list", "--cask", "--versions"], check=True)
             versions = {}
             for line in stdout.strip().split("\n"):
                 if line.strip():
@@ -226,7 +207,7 @@ class BrewClient:
         except InstallationError:
             return {}
 
-    async def info(self, name: str, cask: bool = False) -> Optional[dict[str, str]]:
+    async def info(self, name: str, cask: bool = False) -> dict[str, str] | None:
         """
         Get information about a package.
 
@@ -261,16 +242,14 @@ class BrewClient:
             Tuple of (success, message)
         """
         try:
-            _, stdout, stderr = await self._run_command(
-                ["update"], check=True, timeout=300.0
-            )
+            _, stdout, stderr = await self._run_command(["update"], check=True, timeout=300.0)
             return True, "Homebrew updated"
         except InstallationError as e:
             return False, str(e)
         except asyncio.TimeoutError:
             return False, "Brew update timed out"
 
-    async def upgrade(self, name: Optional[str] = None) -> tuple[bool, str]:
+    async def upgrade(self, name: str | None = None) -> tuple[bool, str]:
         """
         Upgrade packages.
 
@@ -285,9 +264,7 @@ class BrewClient:
             args.append(name)
 
         try:
-            _, stdout, stderr = await self._run_command(
-                args, check=True, timeout=600.0
-            )
+            _, stdout, stderr = await self._run_command(args, check=True, timeout=600.0)
             return True, f"Upgraded {name}" if name else "Upgraded all packages"
         except InstallationError as e:
             return False, str(e)
