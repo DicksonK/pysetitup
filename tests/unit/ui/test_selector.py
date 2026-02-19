@@ -1,6 +1,5 @@
 """Unit tests for pysetitup.ui.selector module."""
 
-
 from pysetitup.config.loader import load_config
 from pysetitup.ui.selector import PackageSelector
 

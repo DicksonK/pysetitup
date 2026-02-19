@@ -1,6 +1,5 @@
 """Shared installation result models using Pydantic for validation."""
 
-
 from pydantic import BaseModel, Field, field_validator
 
 

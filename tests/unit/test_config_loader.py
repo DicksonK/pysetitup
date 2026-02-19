@@ -1,6 +1,5 @@
 """Unit tests for pysetitup.config.loader module."""
 
-
 import pytest
 
 from pysetitup.config.loader import (

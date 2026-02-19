@@ -1,6 +1,5 @@
 """Unit tests for pysetitup.npm.parser module."""
 
-
 from pysetitup.npm.parser import NpmParser
 
 

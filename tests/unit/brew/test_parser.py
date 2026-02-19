@@ -1,6 +1,5 @@
 """Unit tests for pysetitup.brew.parser module."""
 
-
 from pysetitup.brew.parser import BrewParser
 
 

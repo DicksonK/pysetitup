@@ -1,6 +1,5 @@
 """Interactive preset selector TUI using Textual."""
 
-
 from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Container, Horizontal

@@ -73,7 +73,7 @@ class BrewClient:
                 pkg_name = args[1] if len(args) > 1 else "unknown"
                 raise InstallationError(
                     package=pkg_name,
-                    message=f"Brew command failed: {' '.join(args)}\n" f"Exit code: {returncode}\n" f"Stderr: {stderr}",
+                    message=f"Brew command failed: {' '.join(args)}\nExit code: {returncode}\nStderr: {stderr}",
                 )
 
             return returncode, stdout, stderr

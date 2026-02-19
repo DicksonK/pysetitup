@@ -1,6 +1,5 @@
 """Unit tests for pysetitup.ui.confirmation module."""
 
-
 from pysetitup.ui.confirmation import ConfirmationScreen
 
 
